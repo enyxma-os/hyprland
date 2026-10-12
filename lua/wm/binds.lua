@@ -33,6 +33,11 @@ local app_launcher = get_env("MENU") or find_first_binary({ "hyprlauncher", "rof
 local web_browser  = get_env("BROWSER") or find_first_binary({ "firefox", "brave", "chromium", "google-chrome-stable" })
 local screen_lock  = find_first_binary({ "hyprlock", "swaylock" })
 
+-- Ekran görüntüsü ve pano araçları
+local screenshot_screen = "( command -v grimblast >/dev/null 2>&1 && grimblast copysave screen ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m output ) || ( command -v grim >/dev/null 2>&1 && grim ) || true"
+local screenshot_region = "( command -v grimblast >/dev/null 2>&1 && grimblast copysave area ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m region ) || ( command -v slurp >/dev/null 2>&1 && command -v grim >/dev/null 2>&1 && grim -g \"$(slurp)\" ) || true"
+local clipboard_menu    = "( command -v cliphist >/dev/null 2>&1 && command -v rofi >/dev/null 2>&1 && cliphist list | rofi -dmenu | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v fuzzel >/dev/null 2>&1 && cliphist list | fuzzel -d | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v wofi >/dev/null 2>&1 && cliphist list | wofi --dmenu | cliphist decode | wl-copy ) || true"
+
 -- =====================================================
 -- UYGULAMA KISAYOLLARI
 -- =====================================================
@@ -44,8 +49,14 @@ hl.bind(MOD .. " + E", hl.dsp.exec_cmd(file_manager))
 hl.bind(MOD .. " + R", hl.dsp.exec_cmd(app_launcher))
 hl.bind(MOD .. " + W", hl.dsp.exec_cmd(web_browser))
 hl.bind(MOD .. " + L", hl.dsp.exec_cmd(screen_lock))
+hl.bind(MOD .. " + SHIFT + V", hl.dsp.exec_cmd(clipboard_menu))
 hl.bind(MOD .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(MOD .. " + SHIFT + E", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+
+-- Ekran görüntüsü kısayolları
+hl.bind("Print", hl.dsp.exec_cmd(screenshot_screen))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_region))
+hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_region))
 
 -- =====================================================
 -- PENCERE DURUMLARI
@@ -83,6 +94,14 @@ for _, direction in ipairs(directions) do
 end
 
 -- =====================================================
+-- ÇOKLU EKRAN KONTROLLERİ
+-- =====================================================
+
+hl.bind(MOD .. " + comma", hl.dsp.focus({ monitor = "-1" }))
+hl.bind(MOD .. " + period", hl.dsp.focus({ monitor = "+1" }))
+hl.bind(MOD .. " + SHIFT + comma", hl.dsp.window.move({ monitor = "-1" }))
+hl.bind(MOD .. " + SHIFT + period", hl.dsp.window.move({ monitor = "+1" }))
+
 -- ÇALIŞMA ALANLARI
 -- =====================================================
 

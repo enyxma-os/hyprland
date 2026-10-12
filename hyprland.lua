@@ -66,13 +66,13 @@ local function load_module(mod_name)
         if ok2 then
             return res2
         end
-        warn("enyxma uyarisi modul yuklenemedi " .. mod_name)
-        warn("require hatasi " .. tostring(res))
-        warn("dofile hatasi " .. tostring(res2))
+        warn("enyxma uyarısı modül yüklenemedi " .. mod_name)
+        warn("require hatası " .. tostring(res))
+        warn("dofile hatası " .. tostring(res2))
         return nil
     end
 
-    warn("enyxma uyarisi modul yuklenemedi " .. mod_name)
+    warn("enyxma uyarısı modül yüklenemedi " .. mod_name)
     warn("hata " .. tostring(res))
     return nil
 end
