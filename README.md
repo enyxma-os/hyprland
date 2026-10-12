@@ -1,12 +1,13 @@
 # Enyxma Hyprland
 
-Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız ve evrensel pencere yöneticisi yapılandırması.
+Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, modüler ve NixOS Flake uyumlu pencere yöneticisi ekosistemi.
 
 ---
 
 ## Mimari Özellikler
 
 - **Saf Lua Standardı:** Tüm yapılandırma Hyprland C++ Lua bağlayıcıları üzerinde çalışır. Harici eski yapılandırma dosyasına ihtiyaç duymaz.
+- **Nix Flake ve Modül Desteği:** Hem NixOS sistem modülü hem de Home Manager kullanıcı modülü sunar. Deklaratif kurulumu ve canlı geliştirme modunu destekler.
 - **Donanım Bağımsız:** Sabit ekran kartı yolu veya sabit çıkış adı içermez. Sanal makinede yazılım imlecine, fiziksel donanımda ise yüksek yenileme hızına otomatik uyum sağlar.
 - **Akıllı Döşeme:** Dwindle split değeri ile pencerelerin üst üste binmesini önler, her yeni pencereyi sağa veya alta doğru akıllı spiral düzeninde açar.
 - **Evrensel Uygulama Zinciri:** Sistemde kurulu uçbirim, dosya yöneticisi ve menüyü otomatik tespit eder. Eksik uygulama durumunda oturum çökmez.
@@ -17,7 +18,11 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız ve 
 
 ```text
 .
+├── default.nix            # Bağımsız Nix paket tanımı
+├── flake.nix              # Nix Flake giriş noktası ve modül çıktıları
+├── home-module.nix        # Home Manager kullanıcı seviyesi modülü
 ├── Justfile               # Yönetim ve doğrulama komutları
+├── nixos-module.nix       # NixOS sistem seviyesi masaüstü modülü
 ├── README.md              # Belgelendirme
 ├── hyprland.lua           # Ana giriş noktası ve güvenli modül yükleyici
 └── lua
@@ -107,9 +112,11 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız ve 
 
 ---
 
-## Kurulum
+## Kurulum ve Entegrasyon
 
-Yapılandırmayı doğrudan kullanıcı ev dizinine bağlamak için:
+### 1. Geleneksel Kurulum
+
+Herhangi bir Linux dağıtımında doğrudan ev dizinine klonlamak için:
 
 ```bash
 git clone https://codeberg.org/enyxma/hyprland ~/.config/hypr
@@ -119,12 +126,52 @@ Gerekli tüm modüller dinamik yollar üzerinden çözümlendiği için ek yol a
 
 ---
 
+### 2. NixOS ve Flake Entegrasyonu
+
+Ana sisteminizin `flake.nix` dosyasına girdi olarak ekleyin:
+
+```nix
+inputs = {
+  enyxma-hyprland.url = "git+https://codeberg.org/enyxma/hyprland";
+};
+```
+
+#### NixOS Sistem Modülü Olarak Kullanım
+
+Sistem seviyesinde Hyprland, UWSM ve temel masaüstü araçlarını etkinleştirmek için:
+
+```nix
+imports = [
+  inputs.enyxma-hyprland.nixosModules.default
+];
+
+programs.enyxma.hyprland.enable = true;
+```
+
+#### Home Manager Kullanıcı Modülü Olarak Kullanım
+
+Lua dosyalarını kullanıcı ev dizinine deklaratif olarak bağlamak için:
+
+```nix
+imports = [
+  inputs.enyxma-hyprland.homeManagerModules.default
+];
+
+programs.enyxma.hyprland = {
+  enable = true;
+  # Geliştirici modu için yerel kaynak dizini:
+  # sourcePath = "/home/kullanici/Projects/enyxma/hyprland";
+};
+```
+
+---
+
 ## Yönetim Komutları
 
 Depo içinde `just` aracıyla şu görevler çalıştırılabilir:
 
 ```bash
-just check     # Lua sözdizimini test eder
+just check     # Lua ve Nix sözdizimini test eder
 just reload    # Yerel Hyprland oturumunu tazeler
 just sync      # Testleri çalıştırır ve depoya gönderir
 ```
