@@ -1,0 +1,14 @@
+# Editör ve geçici dosyalar
+*~
+*.swp
+*.swo
+*.bak
+*.log
+
+# Nix derleme çıktıları
+result
+result-*
+
+# Çevre ve önbellek
+.direnv/
+.DS_Store
