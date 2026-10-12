@@ -57,7 +57,7 @@ hl.curve("enyxmaSmooth",     { type = "bezier", points = { { 0.05, 0.9 }, { 0.1,
 hl.curve("enyxmaTransition", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
 hl.curve("enyxmaFast",       { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 hl.curve("enyxmaLinear",     { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
-hl.curve("enyxmaSpring",     { type = "spring", mass = 1, stiffness = 238.1191, damping = 24.21279333 })
+hl.curve("enyxmaSpring",     { type = "spring", mass = 1, stiffness = 238.1191, dampening = 24.21279333 })
 
 -- Animasyon yaprakları
 hl.animation({ leaf = "global",        enabled = true, speed = 10,   bezier = "enyxmaLinear" })
