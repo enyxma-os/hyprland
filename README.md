@@ -8,6 +8,8 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 
 - **Saf Lua Standardı:** Tüm yapılandırma Hyprland C++ Lua bağlayıcıları üzerinde çalışır. Harici eski yapılandırma dosyasına ihtiyaç duymaz.
 - **Nix Flake ve Modül Desteği:** Hem NixOS sistem modülü hem de Home Manager kullanıcı modülü sunar. Deklaratif kurulumu ve canlı geliştirme modunu destekler.
+- **İzole İsim Alanı:** `enyxma.desktop.hyprland` isim alanı kullanılarak diğer harici Flake modülleriyle olası çakışmalar kökten engellenmiştir.
+- **Otomatik Çakışma Denetimi:** Özel tarayıcı script ile kısayol tuş çakışmaları daha commit atılmadan yerel denetimle yakalanır.
 - **Donanım Bağımsız:** Sabit ekran kartı yolu veya sabit çıkış adı içermez. Sanal makinede yazılım imlecine, fiziksel donanımda ise yüksek yenileme hızına otomatik uyum sağlar.
 - **Akıllı Döşeme:** Dwindle split değeri ile pencerelerin üst üste binmesini önler, her yeni pencereyi sağa veya alta doğru akıllı spiral düzeninde açar.
 - **Evrensel Uygulama Zinciri:** Sistemde kurulu uçbirim, dosya yöneticisi ve menüyü otomatik tespit eder. Eksik uygulama durumunda oturum çökmez.
@@ -25,15 +27,17 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 ├── nixos-module.nix       # NixOS sistem seviyesi masaüstü modülü
 ├── README.md              # Belgelendirme
 ├── hyprland.lua           # Ana giriş noktası ve güvenli modül yükleyici
-└── lua
-    ├── core
-    │   ├── autostart.lua  # Arka plan servisleri ve ortam değişkenleri
-    │   └── hardware.lua   # Donanım, ekran, Türkçe klavye ve imleç
-    ├── ui
-    │   └── theme.lua      # Renkler, yay eğrileri, animasyonlar ve dwindle
-    └── wm
-        ├── binds.lua      # Kısayollar, fare hareketleri, ekran görüntüsü ve pano
-        └── rules.lua      # Pencere kuralları ve katman ayarları
+├── lua
+│   ├── core
+│   │   ├── autostart.lua  # Arka plan servisleri ve ortam değişkenleri
+│   │   └── hardware.lua   # Donanım, ekran, Türkçe klavye ve imleç
+│   ├── ui
+│   │   └── theme.lua      # Renkler, yay eğrileri, animasyonlar ve dwindle
+│   └── wm
+│       ├── binds.lua      # Kısayollar, fare hareketleri, ekran görüntüsü ve pano
+│       └── rules.lua      # Pencere kuralları ve katman ayarları
+└── scripts
+    └── check-binds.py     # Otomatik kısayol çakışma denetleyicisi
 ```
 
 ---
@@ -145,7 +149,7 @@ imports = [
   inputs.enyxma-hyprland.nixosModules.default
 ];
 
-programs.enyxma.hyprland.enable = true;
+enyxma.desktop.hyprland.enable = true;
 ```
 
 #### Home Manager Kullanıcı Modülü Olarak Kullanım
@@ -157,9 +161,9 @@ imports = [
   inputs.enyxma-hyprland.homeManagerModules.default
 ];
 
-programs.enyxma.hyprland = {
+enyxma.desktop.hyprland = {
   enable = true;
-  # Geliştirici modu için yerel kaynak dizini:
+  # Canlı geliştirme modu için yerel kaynak dizini:
   # sourcePath = "/home/kullanici/Projects/enyxma/hyprland";
 };
 ```
@@ -171,7 +175,7 @@ programs.enyxma.hyprland = {
 Depo içinde `just` aracıyla şu görevler çalıştırılabilir:
 
 ```bash
-just check     # Lua ve Nix sözdizimini test eder
+just check     # Lua, Nix ve kısayol çakışmalarını test eder
 just reload    # Yerel Hyprland oturumunu tazeler
 just sync      # Testleri çalıştırır ve depoya gönderir
 ```

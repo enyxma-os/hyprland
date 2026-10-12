@@ -7,8 +7,8 @@ stdenvNoCC.mkDerivation {
   src = ./.;
 
   installPhase = ''
-    mkdir -p $out/share/enyxma-hyprland
-    cp -r hyprland.lua lua $out/share/enyxma-hyprland/
+    mkdir -p $out/share/hypr
+    cp -r hyprland.lua lua $out/share/hypr/
   '';
 
   meta = with lib; {

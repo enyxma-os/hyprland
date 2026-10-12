@@ -10,21 +10,21 @@
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     in {
-      # NixOS sistem modülü
+      # NixOS sistem modulu
       nixosModules.default = import ./nixos-module.nix;
-      nixosModules.enyxma-hyprland = import ./nixos-module.nix;
+      nixosModules.hyprland = import ./nixos-module.nix;
 
-      # Home Manager kullanıcı modülü
+      # Home Manager kullanici modulu
       homeManagerModules.default = import ./home-module.nix;
-      homeManagerModules.enyxma-hyprland = import ./home-module.nix;
+      homeManagerModules.hyprland = import ./home-module.nix;
 
-      # Bağımsız paket çıktısı
+      # Bagimsiz paket ciktisi
       packages = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in {
           default = pkgs.callPackage ./default.nix { };
-          enyxma-hyprland = pkgs.callPackage ./default.nix { };
+          hyprland = pkgs.callPackage ./default.nix { };
         }
       );
     };
