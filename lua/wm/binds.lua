@@ -142,3 +142,11 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
+
+
+-- =====================================================
+-- ENYXMA SHELL IPC KISAYOLLARI
+-- =====================================================
+hl.bind(MOD .. " + space", hl.dsp.exec_cmd("qs ipc call enyxma-launcher toggle"))
+hl.bind(MOD .. " + D", hl.dsp.exec_cmd("qs ipc call enyxma-dashboard toggle"))
+hl.bind(MOD .. " + B", hl.dsp.exec_cmd("qs ipc call enyxma-bar toggle"))

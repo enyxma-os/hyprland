@@ -24,7 +24,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(build_service_chain({ "dunst", "mako", "swaync", "fnott" }))
 
     -- Durum çubuğu
-    hl.exec_cmd(build_service_chain({ "waybar", "quickshell", "ironbar" }))
+    hl.exec_cmd(build_service_chain({ "qs", "quickshell", "waybar", "ironbar" }))
 
     -- Duvar kağıdı
     hl.exec_cmd(build_service_chain({ "hyprpaper", "swaybg" }))
