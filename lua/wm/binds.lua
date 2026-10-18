@@ -73,8 +73,8 @@ hl.bind(MOD .. " + J", hl.dsp.layout("togglesplit"))
 hl.bind(MOD .. " + G", function() if GamingMode and GamingMode.toggle then GamingMode.toggle() end end)
 hl.bind(MOD .. " + SHIFT + G", hl.dsp.group.toggle())
 hl.bind(MOD .. " + Tab", hl.dsp.exec_cmd("quickshell ipc call enyxma-overview toggle"))
-hl.bind("ALT + Tab", hl.dsp.exec_cmd("quickshell ipc call enyxma-overview next"))
-hl.bind("ALT + SHIFT + Tab", hl.dsp.exec_cmd("quickshell ipc call enyxma-overview prev"))
+hl.bind("ALT + Tab", hl.dsp.focus({ workspace = "previous" }))
+hl.bind("ALT + SHIFT + Tab", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(MOD .. " + C", hl.dsp.window.center())
 
 -- =====================================================
