@@ -59,12 +59,13 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 | SUPER + SHIFT + R | Hyprland yapılandırmasını yeniden yükle |
 | SUPER + SHIFT + E | Oturumdan çıkış yap |
 
-### Ekran Görüntüsü
+### Ekran Görüntüsü (Enyxma Shot & Mockup)
 
 | Tuş | İşlev |
 | :--- | :--- |
 | Print | Tam ekran görüntüsü al ve panoya kopyala |
-| SHIFT + Print | Seçilen alan görüntüsü al ve panoya kopyala |
+| SHIFT + Print | Seçilen alan görüntüsü ve düzenleme moduna gir |
+| SUPER + SHIFT + S | Enyxma Shot ekran alma ve ✦ Mockup stüdyosuna gir |
 | SUPER + Print | Seçilen alan görüntüsü al ve panoya kopyala |
 
 ### Pencere Yönetimi
@@ -104,7 +105,7 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 | SUPER + 1..9, 0 | Belirtilen çalışma alanına geç |
 | SUPER + SHIFT + 1..9, 0 | Pencereyi çalışma alanına taşı |
 | SUPER + S | Özel çalışma alanını aç veya kapat |
-| SUPER + SHIFT + S | Pencereyi özel çalışma alanına gönder |
+| SUPER + SHIFT + M | Pencereyi özel çalışma alanına gönder |
 | SUPER + Fare Tekerleği | Çalışma alanları arasında sırayla gez |
 
 ### Fare İşlemleri
