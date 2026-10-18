@@ -58,6 +58,10 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 | SUPER + SHIFT + V | Pano geçmişi menüsünü aç |
 | SUPER + SHIFT + R | Hyprland yapılandırmasını yeniden yükle |
 | SUPER + SHIFT + E | Oturumdan çıkış yap |
+| SUPER + N | Enyxma Bildirim Merkezini aç veya kapat |
+| SUPER + D | Enyxma Kontrol Merkezini (CC / Dashboard) aç veya kapat |
+| SUPER + B | Enyxma Üst Durum Çubuğunu aç veya kapat |
+| SUPER + Boşluk | Enyxma Omni Launcher arama menüsünü aç |
 
 ### Ekran Görüntüsü (Enyxma Shot & Mockup)
 
@@ -77,6 +81,8 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 | SUPER + V | Yüzen pencere durumunu değiştir |
 | SUPER + P | Sahte döşeme durumuna geç |
 | SUPER + J | Bölünme yönünü değiştir |
+| SUPER + G | ✦ Gaming Modu (Saf 180Hz / Blur ve Animasyonları Anında Kapat) |
+| SUPER + SHIFT + G | Sekme grubunu aç veya kapat (Auto-Tab ile otomatik de yönetilir) |
 | SUPER + Tab | Sonraki pencereye odaklan |
 | SUPER + C | Pencereyi ekranda ortala |
 

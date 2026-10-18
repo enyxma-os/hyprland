@@ -78,9 +78,11 @@ local function load_module(mod_name)
 end
 
 -- Yükleme sırası önemlidir
--- Donanım önce tanımlanır böylece ekran ve klavye hazır olur
+-- Yardımcı kütüphane en başta yüklenir, böylece global Utils her yerden erişilebilir olur
+load_module("lua.lib.utils")
 load_module("lua.core.hardware")
 load_module("lua.ui.theme")
 load_module("lua.wm.rules")
+load_module("lua.wm.events")
 load_module("lua.wm.binds")
 load_module("lua.core.autostart")
