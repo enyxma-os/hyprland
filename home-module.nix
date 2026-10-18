@@ -33,16 +33,19 @@ in {
   };
 
   config = mkIf (cfg.enable || config.enyxma.hyprland.enable) {
-    # Hyprland Lua yapilandirma dosyalari baglanir
+    # Hyprland Lua ve bagli bilesenlerin yapilandirma dosyalari baglanir
     xdg.configFile."hypr/hyprland.lua".source = lib.mkDefault (resolveSource ./hyprland.lua "hyprland.lua");
     xdg.configFile."hypr/lua".source = lib.mkDefault (resolveSource ./lua "lua");
+    xdg.configFile."hypr/hyprlock.conf".source = lib.mkDefault (resolveSource ./configs/hyprlock.conf "configs/hyprlock.conf");
+    xdg.configFile."hypr/hypridle.conf".source = lib.mkDefault (resolveSource ./configs/hypridle.conf "configs/hypridle.conf");
+    xdg.configFile."hypr/scripts".source = lib.mkDefault (resolveSource ./scripts "scripts");
 
     # Ekran goruntusu klasoru guvenceye alinir
     home.activation.createScreenshotsDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/Pictures/Screenshots"
     '';
 
-    # Kullanici araclari
+    # Kullanici ve masaustu araclari
     home.packages = with pkgs; [
       grim
       slurp
@@ -50,6 +53,9 @@ in {
       cliphist
       brightnessctl
       playerctl
+      hyprlock
+      hypridle
+      ddcutil
     ];
   };
 }
