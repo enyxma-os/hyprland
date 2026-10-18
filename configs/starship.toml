@@ -1,0 +1,43 @@
+# Enyxma OS - Starship Prompt Configuration
+# Deep Space Slate theme with Sky/Cyan (#38BDF8) and Indigo (#818CF8)
+
+add_newline = true
+format = "$username$hostname$directory$git_branch$git_status$cmd_duration$line_break$character"
+
+[character]
+success_symbol = "[➜](bold #38BDF8)"
+error_symbol = "[✗](bold #EF4444)"
+
+[username]
+style_user = "bold #38BDF8"
+style_root = "bold #EF4444"
+format = "[$user]($style)"
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[@$hostname]($style) "
+style = "bold #818CF8"
+disabled = false
+
+[directory]
+style = "bold #38BDF8"
+truncation_length = 3
+truncate_to_repo = false
+format = "[$path]($style) "
+read_only = " 🔒"
+
+[git_branch]
+style = "bold #10B981"
+symbol = " "
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "bold #EF4444"
+format = "[$all_status$ahead_behind]($style) "
+
+[cmd_duration]
+style = "bold #F59E0B"
+min_time = 2000
+format = "[$duration]($style) "

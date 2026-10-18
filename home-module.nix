@@ -10,6 +10,36 @@ let
       config.lib.file.mkOutOfStoreSymlink "${cfg.sourcePath}/${relPath}"
     else
       storePath;
+
+  # Standart Enyxma modern kabuk kisayollari
+  enyxmaAliases = {
+    # Modern CLI alternatifleri
+    ls = "eza --icons --git -a";
+    lt = "eza --tree --level=2 --icons";
+    ll = "eza --icons --git -lha --group-directories-first --time-style=long-iso";
+    l = "eza --icons --git -lh --group-directories-first";
+    la = "eza --icons --git -lha --group-directories-first";
+    cat = "bat";
+    grep = "rg";
+    find = "fd";
+    cd = "z"; # Zoxide akilli dizin degistirme
+
+    # NixOS sistem yonetimi
+    update = "nh os switch";
+    clean = "nh clean all";
+
+    # Guvenli gelistirme (Ag izolasyonu / Sandbox)
+    shell-safe = "systemd-run --user --scope -p PrivateNetwork=true bash";
+    pnpm-safe = "systemd-run --user --scope -p PrivateNetwork=true pnpm";
+
+    # Power-User araclari
+    lg = "lazygit";
+    v = "nvim";
+
+    # VSCodium bayat kilit temizleyici guvenli baslatici
+    code = "$HOME/.config/hypr/scripts/codium-safe.sh";
+    codium = "$HOME/.config/hypr/scripts/codium-safe.sh";
+  };
 in {
   options.enyxma.desktop.hyprland = {
     enable = mkEnableOption "Enyxma Hyprland user configuration and files";
@@ -19,6 +49,14 @@ in {
       default = null;
       example = "/home/username/Projects/enyxma/hyprland";
       description = "Yerel gelistirme dizini yolu. Belirtilirse canli duzenleme modu aktif olur.";
+    };
+
+    terminal = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enyxma modern terminal profili, starship prompt, fastfetch ve kisayollari aktif eder.";
+      };
     };
   };
 
@@ -45,6 +83,46 @@ in {
       mkdir -p "$HOME/Pictures/Screenshots"
     '';
 
+    # Terminal ve Power-User dosyalari
+    xdg.configFile."fastfetch/config.jsonc".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/fastfetch.jsonc "configs/fastfetch.jsonc"));
+    xdg.configFile."starship.toml".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/starship.toml "configs/starship.toml"));
+    xdg.configFile."foot/foot.ini".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/foot.ini "configs/foot.ini"));
+    xdg.configFile."kitty/kitty.conf".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/kitty.conf "configs/kitty.conf"));
+
+    # Kabuk kisayollari ve entegrasyonu
+    programs.bash = lib.mkIf cfg.terminal.enable {
+      enable = lib.mkDefault true;
+      shellAliases = enyxmaAliases;
+    };
+
+    programs.fish = lib.mkIf cfg.terminal.enable {
+      enable = lib.mkDefault true;
+      shellAliases = enyxmaAliases;
+      interactiveShellInit = ''
+        set fish_greeting
+      '';
+    };
+
+    programs.zsh = lib.mkIf cfg.terminal.enable {
+      enable = lib.mkDefault true;
+      shellAliases = enyxmaAliases;
+    };
+
+    # Starship ve Zoxide servisleri
+    programs.starship = lib.mkIf cfg.terminal.enable {
+      enable = lib.mkDefault true;
+      enableBashIntegration = lib.mkDefault true;
+      enableFishIntegration = lib.mkDefault true;
+      enableZshIntegration = lib.mkDefault true;
+    };
+
+    programs.zoxide = lib.mkIf cfg.terminal.enable {
+      enable = lib.mkDefault true;
+      enableBashIntegration = lib.mkDefault true;
+      enableFishIntegration = lib.mkDefault true;
+      enableZshIntegration = lib.mkDefault true;
+    };
+
     # Kullanici ve masaustu araclari
     home.packages = with pkgs; [
       grim
@@ -56,6 +134,19 @@ in {
       hyprlock
       hypridle
       ddcutil
+    ] ++ lib.optionals cfg.terminal.enable [
+      fastfetch
+      starship
+      eza
+      bat
+      fzf
+      ripgrep
+      fd
+      zoxide
+      jq
+      lazygit
+      foot
+      kitty
     ];
   };
 }
