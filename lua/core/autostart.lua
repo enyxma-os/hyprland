@@ -1,46 +1,37 @@
 -- =====================================================
 -- enyxma otomatik başlatma modülü
 -- Temel arka plan servisleri burada başlatılır
--- Kurulu olmayan servisler sessizce atlanır
+-- Enyxma Shell ve Wayland oturum standartlarıyla tam uyumludur
 -- =====================================================
-
--- Kurulu olan ilk servisi başlatan kabuk zinciri oluşturulur
-local function build_service_chain(candidates)
-    local parts = {}
-    for _, binary_name in ipairs(candidates) do
-        parts[#parts + 1] = "( command -v " .. binary_name .. " >/dev/null 2>&1 && " .. binary_name .. " )"
-    end
-    parts[#parts + 1] = "true"
-    return table.concat(parts, " || ")
-end
 
 -- Başlatma olayı dinlenir
 hl.on("hyprland.start", function()
-    -- Masaüstü oturum değişkenleri D-Bus ortamına aktarılır
-    -- Portallar ve diğer servisler bu değişkenlere ihtiyaç duyar
+    -- 1. UWSM oturumunu hazır işaretle → graphical-session.target aktifleşir
+    -- Bu çağrı olmadan systemd user servisleri (quickshell, cliphist vb.) başlayamaz
+    hl.exec_cmd("command -v uwsm >/dev/null 2>&1 && uwsm finalize")
+
+    -- 2. Masaüstü oturum değişkenleri D-Bus ve systemd ortamına aktarılır
     hl.exec_cmd("command -v dbus-update-activation-environment >/dev/null 2>&1 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP")
 
-    -- Bildirim servisi
-    hl.exec_cmd(build_service_chain({ "dunst", "mako", "swaync", "fnott" }))
+    -- 3. Enyxma Shell masaüstü kabuğu başlatılır
+    -- Quickshell tabanlı Enyxma Shell, dahili bildirim ve kontrol merkezi sunar
+    hl.exec_cmd("( command -v enyxma-shell >/dev/null 2>&1 && enyxma-shell ) || ( command -v quickshell >/dev/null 2>&1 && quickshell ) || true")
 
-    -- Durum çubuğu
-    hl.exec_cmd(build_service_chain({ "qs", "quickshell", "waybar", "ironbar" }))
+    -- 4. Duvar kağıdı motoru (awww veya swww daemon)
+    hl.exec_cmd("( command -v awww-daemon >/dev/null 2>&1 && awww-daemon ) || ( command -v swww-daemon >/dev/null 2>&1 && swww-daemon ) || true")
 
-    -- Duvar kağıdı
-    hl.exec_cmd(build_service_chain({ "hyprpaper", "swaybg" }))
+    -- 5. Güç yönetimi ve ekran kilidi zamanlayıcısı
+    hl.exec_cmd("command -v hypridle >/dev/null 2>&1 && hypridle")
 
-    -- Güç yönetimi ve ekran kilidi zamanlayıcısı
-    hl.exec_cmd(build_service_chain({ "hypridle", "swayidle" }))
+    -- 6. Polkit yetki istemcisi
+    hl.exec_cmd("( command -v hyprpolkitagent >/dev/null 2>&1 && hyprpolkitagent ) || ( command -v polkit-gnome-authentication-agent-1 >/dev/null 2>&1 && polkit-gnome-authentication-agent-1 ) || ( command -v lxpolkit >/dev/null 2>&1 && lxpolkit ) || true")
 
-    -- Yetki istemcisi
-    hl.exec_cmd(build_service_chain({ "hyprpolkitagent", "polkit-gnome-authentication-agent-1", "lxpolkit" }))
-
-    -- Pano geçmişi
+    -- 7. Pano geçmişi (cliphist)
     hl.exec_cmd("command -v cliphist >/dev/null 2>&1 && command -v wl-paste >/dev/null 2>&1 && wl-paste --watch cliphist store")
 
-    -- Masaüstü portalı
-    hl.exec_cmd("command -v xdg-desktop-portal-hyprland >/dev/null 2>&1 && xdg-desktop-portal-hyprland")
+    -- 8. Ağ yöneticisi göstergesi (nm-applet)
+    hl.exec_cmd("command -v nm-applet >/dev/null 2>&1 && nm-applet --indicator")
 
-    -- Dizilim göstergesi
+    -- 9. İmleç teması ve boyutu
     hl.exec_cmd("command -v hyprctl >/dev/null 2>&1 && hyprctl setcursor Adwaita 24")
 end)
