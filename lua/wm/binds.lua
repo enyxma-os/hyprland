@@ -122,7 +122,7 @@ hl.bind(MOD .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(MOD .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 -- Özel çalışma alanı
-hl.bind(MOD .. " + S", hl.dsp.workspace.toggle_special("magic"))
+hl.bind(MOD .. " + grave", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(MOD .. " + SHIFT + M", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- =====================================================
@@ -156,3 +156,4 @@ hl.bind(MOD .. " + space", hl.dsp.exec_cmd("qs ipc call enyxma-launcher toggle")
 hl.bind(MOD .. " + D", hl.dsp.exec_cmd("qs ipc call enyxma-dashboard toggle"))
 hl.bind(MOD .. " + B", hl.dsp.exec_cmd("qs ipc call enyxma-bar toggle"))
 hl.bind(MOD .. " + N", hl.dsp.exec_cmd("quickshell ipc call notifications toggle"))
+hl.bind(MOD .. " + S", hl.dsp.exec_cmd("quickshell ipc call ai toggle"))
