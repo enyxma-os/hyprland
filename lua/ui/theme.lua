@@ -3,6 +3,34 @@
 -- Boşluklar kenarlık renkler yerleşim ve animasyonlar
 -- =====================================================
 
+-- Matugen dinamik renklerini güvenli şekilde yükle (Fail-Safe)
+local function load_dynamic_colors()
+    local xdg = os.getenv("XDG_CONFIG_HOME")
+    local home = os.getenv("HOME")
+    local candidates = {
+        (xdg and (xdg .. "/hypr/colors.lua")),
+        (home and (home .. "/.config/hypr/colors.lua")),
+        "colors.lua",
+    }
+    for _, path in ipairs(candidates) do
+        if path then
+            local f = io.open(path, "r")
+            if f then
+                f:close()
+                local ok, mod = pcall(dofile, path)
+                if ok and type(mod) == "table" then
+                    return mod
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local dyn = load_dynamic_colors()
+local active_a = (dyn and dyn.accent) or "rgba(7aa2f7ee)"
+local active_b = (dyn and dyn.outline) or "rgba(bb9af7ee)"
+
 -- Genel görünüm ayarları
 hl.config({
     general = {
@@ -12,7 +40,7 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = { colors = { "rgba(7aa2f7ee)", "rgba(bb9af7ee)" }, angle = 45 },
+            active_border   = { colors = { active_a, active_b }, angle = 45 },
             inactive_border = "rgba(3b4261aa)",
         },
 
