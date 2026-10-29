@@ -29,9 +29,6 @@ hl.on("hyprland.start", function()
     -- 7. Pano geçmişi (cliphist)
     hl.exec_cmd("command -v cliphist >/dev/null 2>&1 && command -v wl-paste >/dev/null 2>&1 && wl-paste --watch cliphist store")
 
-    -- 8. Ağ yöneticisi göstergesi (nm-applet)
-    hl.exec_cmd("command -v nm-applet >/dev/null 2>&1 && nm-applet --indicator")
-
-    -- 9. İmleç teması ve boyutu
+    -- 8. İmleç teması ve boyutu
     hl.exec_cmd("command -v hyprctl >/dev/null 2>&1 && hyprctl setcursor Adwaita 24")
 end)
