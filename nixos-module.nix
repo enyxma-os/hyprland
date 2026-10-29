@@ -49,7 +49,6 @@ in {
     environment.systemPackages = with pkgs; [
       quickshell
       awww
-      networkmanagerapplet
       grim
       slurp
       wl-clipboard

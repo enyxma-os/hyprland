@@ -116,8 +116,7 @@ in {
       with pkgs; [
         quickshell
         awww
-        networkmanagerapplet
-        grim
+          grim
         slurp
         wl-clipboard
         cliphist
