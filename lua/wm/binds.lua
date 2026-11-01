@@ -39,7 +39,7 @@ local web_browser      = get_env("BROWSER") or find_first_binary({ "librewolf", 
 local screen_lock      = find_first_binary({ "hyprlock", "swaylock" })
 
 -- Ekran görüntüsü ve pano araçları Enyxma Shot & yedek mekanizmalar
-local enyxma_shot       = "( command -v enyxma-shot >/dev/null 2>&1 && enyxma-shot ) || ( [ -f \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" ] && flock -n -o /tmp/enyxma-shot.lock quickshell -p \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" )"
+local enyxma_shot       = "( command -v enyxma-shot >/dev/null 2>&1 && enyxma-shot ) || ( [ -f \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" ] && flock -n -o \"${XDG_RUNTIME_DIR:-/tmp}/enyxma-shot.lock\" quickshell -p \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" )"
 local screenshot_screen = enyxma_shot .. " || ( command -v grimblast >/dev/null 2>&1 && grimblast copysave screen ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m output ) || ( command -v grim >/dev/null 2>&1 && grim ) || true"
 local screenshot_region = enyxma_shot .. " || ( command -v grimblast >/dev/null 2>&1 && grimblast copysave area ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m region ) || ( command -v slurp >/dev/null 2>&1 && command -v grim >/dev/null 2>&1 && grim -g \"$(slurp)\" ) || true"
 local clipboard_menu    = "( command -v cliphist >/dev/null 2>&1 && command -v rofi >/dev/null 2>&1 && cliphist list | rofi -dmenu | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v fuzzel >/dev/null 2>&1 && cliphist list | fuzzel -d | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v wofi >/dev/null 2>&1 && cliphist list | wofi --dmenu | cliphist decode | wl-copy ) || true"
