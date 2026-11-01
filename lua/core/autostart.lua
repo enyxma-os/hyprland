@@ -13,9 +13,9 @@ hl.on("hyprland.start", function()
     -- 2. Masaüstü oturum değişkenleri D-Bus ve systemd ortamına aktarılır
     hl.exec_cmd("command -v dbus-update-activation-environment >/dev/null 2>&1 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP")
 
-    -- 3. Enyxma Shell masaüstü kabuğu başlatılır
-    -- Quickshell tabanlı Enyxma Shell, dahili bildirim ve kontrol merkezi sunar
-    hl.exec_cmd("( command -v enyxma-shell >/dev/null 2>&1 && enyxma-shell ) || ( command -v quickshell >/dev/null 2>&1 && quickshell ) || true")
+    -- 3. Enyxma Shell masaüstü kabuğu
+    -- Systemd user servisi (enyxma-shell) etkinse mükerrer başlatılmaz, değilse yedek olarak çalıştırılır
+    hl.exec_cmd("systemctl --user is-enabled --quiet enyxma-shell 2>/dev/null || ( command -v enyxma-shell >/dev/null 2>&1 && enyxma-shell ) || ( command -v quickshell >/dev/null 2>&1 && quickshell ) || true")
 
     -- 4. Duvar kağıdı motoru (awww veya swww daemon)
     hl.exec_cmd("( command -v awww-daemon >/dev/null 2>&1 && awww-daemon ) || ( command -v swww-daemon >/dev/null 2>&1 && swww-daemon ) || true")
