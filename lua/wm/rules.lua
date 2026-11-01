@@ -1,11 +1,11 @@
 -- =====================================================
--- enyxma pencere ve katman kuralları (Rules)
+-- enyxma pencere ve katman kuralları Rules
 -- Hyprland 0.56+ Pure Lua API
 -- Pencere davranışları, opasite, sistem float ve Enyxma Shell blur katmanları
 -- =====================================================
 
 -- ═══════════════════════════════════════════
--- 1. TEMEL PENCERE KURALLARI (Declarative API)
+-- 1. TEMEL PENCERE KURALLARI Declarative API
 -- ═══════════════════════════════════════════
 
 -- Tüm uygulamalardan gelen sahte büyütme istekleri yok sayılır
@@ -96,11 +96,11 @@ hl.layer_rule({
 })
 
 -- ═══════════════════════════════════════════
--- 2. GELİŞMİŞ PENCERE VE KATMAN KURALLARI (hl.config)
+-- 2. GELİŞMİŞ PENCERE VE KATMAN KURALLARI hl.config
 -- ═══════════════════════════════════════════
 hl.config({
     windowrulev2 = {
-        -- Sistem Araçları ve Ayar Yöneticileri (Otomatik Float)
+        -- Sistem Araçları ve Ayar Yöneticileri Otomatik Float
         "float, class:^(pavucontrol)$",
         "float, class:^(blueman-manager)$",
         "float, class:^(.blueman-manager-wrapped)$",
@@ -113,44 +113,44 @@ hl.config({
         "float, title:^(Confirm to replace files)$",
         "float, title:^(File Operation Progress)$",
 
-        -- Steam Diyalogları (Ana vitrin tile, popup/sohbet float)
+        -- Steam Diyalogları Ana vitrin tile, popup/sohbet float
         "float, class:^(steam)$",
         "tile, class:^(steam)$, title:^(Steam)$",
 
-        -- Geliştirici Ortamı Opasitesi (Glassmorphism Derinliği)
+        -- Geliştirici Ortamı Opasitesi Glassmorphism Derinliği
         "opacity 0.95 0.90, class:^(code)$",
         "opacity 0.95 0.90, class:^(Code)$",
         "opacity 0.95 0.90, class:^(codium)$",
         "opacity 0.95 0.90, class:^(vscodium)$",
         "opacity 0.95 0.90, class:^(antigravity-ide)$",
 
-        -- Tam Ekranda Boşta Kalma Kilidini Önle (Film ve Oyun Koruması)
+        -- Tam Ekranda Boşta Kalma Kilidini Önle Film ve Oyun Koruması
         "idleinhibit fullscreen, fullscreen:1",
     },
 
     -- ═══════════════════════════════════════════
-    -- 3. ENYXMA SHELL KATMAN KURALLARI (Blur & Animasyonlar)
+    -- 3. ENYXMA SHELL KATMAN KURALLARI Blur & Animasyonlar
     -- ═══════════════════════════════════════════
     layerrule = {
         -- Tüm Enyxma Shell pencerelerine donanımsal çift-geçişli blur ve kenar koruması
         "blur, ^(enyxma-.*)$",
         "ignorezero, ^(enyxma-.*)$",
 
-        -- Enyxma Bar (Üst durum çubuğu)
+        -- Enyxma Bar Üst durum çubuğu
         "animation slide top, enyxma-bar",
 
-        -- Enyxma Control Center & AI Sidebar (Sağdan akıcı kayma)
+        -- Enyxma Control Center & AI Sidebar Sağdan akıcı kayma
         "animation slide right, enyxma-cc",
         "animation slide right, enyxma-ai",
 
-        -- Enyxma Omni Launcher (Merkezden yumuşak büyüme)
+        -- Enyxma Omni Launcher Merkezden yumuşak büyüme
         "animation popin 80%, enyxma-launcher",
 
-        -- Tanzaku Wallpaper & Media Browser (Önizleme geçişleri)
+        -- Tanzaku Wallpaper & Media Browser Önizleme geçişleri
         "animation popin 85%, enyxma-wallpaper-picker",
         "animation popin 85%, enyxma-media-browser",
 
-        -- Bildirimler ve OSD Katmanları (Hafif kararma/belirme)
+        -- Bildirimler ve OSD Katmanları Hafif kararma/belirme
         "animation fade, enyxma-notifications",
         "animation fade, enyxma-notify",
         "animation fade, enyxma-osd",
@@ -158,7 +158,7 @@ hl.config({
         -- Enyxma Shot & Mockup Stüdyosu
         "animation fade, enyxma-shot",
 
-        -- Enyxma Overview (Mission Control pencere genel bakışı)
+        -- Enyxma Overview Mission Control pencere genel bakışı
         "animation fade, enyxma-overview",
     },
 })

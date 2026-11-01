@@ -27,13 +27,18 @@ local function find_first_binary(candidates)
 end
 
 -- Tercih edilen uygulamalar
-local terminal     = get_env("TERMINAL") or find_first_binary({ "kitty", "foot", "alacritty", "wezterm", "konsole", "xterm" })
-local file_manager = get_env("FILEMANAGER") or find_first_binary({ "nautilus", "dolphin", "thunar", "nemo", "pcmanfm" })
-local app_launcher = get_env("MENU") or find_first_binary({ "hyprlauncher", "rofi", "wofi", "fuzzel", "dmenu_run" })
-local web_browser  = get_env("BROWSER") or find_first_binary({ "firefox", "brave", "chromium", "google-chrome-stable" })
-local screen_lock  = find_first_binary({ "hyprlock", "swaylock" })
+local function qs_call(target, action)
+    return "quickshell -p $HOME/.local/share/enyxma-shell/0.2.0/shell.qml ipc call " .. target .. " " .. action
+end
 
--- Ekran görüntüsü ve pano araçları (Enyxma Shot & yedek mekanizmalar)
+local terminal         = get_env("TERMINAL") or "kitty -o remember_window_size=no"
+local file_manager     = get_env("FILEMANAGER") or find_first_binary({ "thunar", "nautilus", "dolphin", "nemo", "pcmanfm" })
+local tui_file_manager = "kitty -o remember_window_size=no -e yazi"
+local app_launcher     = get_env("MENU") or qs_call("launcher", "toggle")
+local web_browser      = get_env("BROWSER") or find_first_binary({ "librewolf", "firefox", "brave", "chromium", "google-chrome-stable" })
+local screen_lock      = find_first_binary({ "hyprlock", "swaylock" })
+
+-- Ekran görüntüsü ve pano araçları Enyxma Shot & yedek mekanizmalar
 local enyxma_shot       = "( command -v enyxma-shot >/dev/null 2>&1 && enyxma-shot ) || ( [ -f \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" ] && flock -n -o /tmp/enyxma-shot.lock quickshell -p \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" )"
 local screenshot_screen = enyxma_shot .. " || ( command -v grimblast >/dev/null 2>&1 && grimblast copysave screen ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m output ) || ( command -v grim >/dev/null 2>&1 && grim ) || true"
 local screenshot_region = enyxma_shot .. " || ( command -v grimblast >/dev/null 2>&1 && grimblast copysave area ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m region ) || ( command -v slurp >/dev/null 2>&1 && command -v grim >/dev/null 2>&1 && grim -g \"$(slurp)\" ) || true"
@@ -47,6 +52,7 @@ hl.bind(MOD .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(MOD .. " + Q", hl.dsp.window.close())
 hl.bind(MOD .. " + SHIFT + Q", hl.dsp.window.kill())
 hl.bind(MOD .. " + E", hl.dsp.exec_cmd(file_manager))
+hl.bind(MOD .. " + Y", hl.dsp.exec_cmd(tui_file_manager))
 hl.bind(MOD .. " + R", hl.dsp.exec_cmd(app_launcher))
 hl.bind(MOD .. " + W", hl.dsp.exec_cmd(web_browser))
 hl.bind(MOD .. " + L", hl.dsp.exec_cmd(screen_lock))
@@ -54,7 +60,7 @@ hl.bind(MOD .. " + SHIFT + V", hl.dsp.exec_cmd(clipboard_menu))
 hl.bind(MOD .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(MOD .. " + SHIFT + E", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 
--- Ekran görüntüsü kısayolları (Enyxma Shot: Print, Shift+Print, Super+Shift+S)
+-- Ekran görüntüsü kısayolları Enyxma Shot: Print, Shift+Print, Super+Shift+S
 hl.bind("Print", hl.dsp.exec_cmd(screenshot_screen))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_region))
 hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_region))
@@ -72,7 +78,7 @@ hl.bind(MOD .. " + SHIFT + P", hl.dsp.window.pin({ action = "toggle" }))
 hl.bind(MOD .. " + J", hl.dsp.layout("togglesplit"))
 hl.bind(MOD .. " + G", function() if GamingMode and GamingMode.toggle then GamingMode.toggle() end end)
 hl.bind(MOD .. " + SHIFT + G", hl.dsp.group.toggle())
-hl.bind(MOD .. " + Tab", hl.dsp.exec_cmd("quickshell ipc call enyxma-overview toggle"))
+hl.bind(MOD .. " + Tab", hl.dsp.exec_cmd(qs_call("overview", "toggle")))
 hl.bind("ALT + Tab", hl.dsp.focus({ workspace = "previous" }))
 hl.bind("ALT + SHIFT + Tab", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(MOD .. " + C", hl.dsp.window.center())
@@ -152,8 +158,8 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 -- =====================================================
 -- ENYXMA SHELL IPC KISAYOLLARI
 -- =====================================================
-hl.bind(MOD .. " + space", hl.dsp.exec_cmd("qs ipc call enyxma-launcher toggle"))
-hl.bind(MOD .. " + D", hl.dsp.exec_cmd("qs ipc call enyxma-dashboard toggle"))
-hl.bind(MOD .. " + B", hl.dsp.exec_cmd("qs ipc call enyxma-bar toggle"))
-hl.bind(MOD .. " + N", hl.dsp.exec_cmd("quickshell ipc call notifications toggle"))
-hl.bind(MOD .. " + S", hl.dsp.exec_cmd("quickshell ipc call ai toggle"))
+hl.bind(MOD .. " + space", hl.dsp.exec_cmd(qs_call("launcher", "toggle")))
+hl.bind(MOD .. " + D", hl.dsp.exec_cmd(qs_call("dashboard", "toggle")))
+hl.bind(MOD .. " + B", hl.dsp.exec_cmd(qs_call("bar", "toggle")))
+hl.bind(MOD .. " + N", hl.dsp.exec_cmd(qs_call("notifications", "toggle")))
+hl.bind(MOD .. " + S", hl.dsp.exec_cmd(qs_call("ai", "toggle")))

@@ -1,11 +1,11 @@
 -- =====================================================
--- enyxma akıllı olaylar ve uzaysal mantık (Smart Event Hooks)
+-- enyxma akıllı olaylar ve uzaysal mantık Smart Event Hooks
 -- Hyprland 0.56+ Pure Lua API
 -- GamingMode, Odak Koruma, Geometrik Auto-Tab ve Zen Modu
 -- =====================================================
 
 -- ═══════════════════════════════════════════
--- 1. DURUM YÖNETİMİ (RAM İçi, Sıfır Gecikme)
+-- 1. DURUM YÖNETİMİ RAM İçi, Sıfır Gecikme
 -- ═══════════════════════════════════════════
 local ws_window_counts = {}
 
@@ -33,7 +33,7 @@ local function get_ws_id(w)
 end
 
 -- ═══════════════════════════════════════════
--- 2. GAMING / DÜŞÜK GECİKME MODU (SUPER+G)
+-- 2. GAMING / DÜŞÜK GECİKME MODU SUPER+G
 -- ═══════════════════════════════════════════
 GamingMode = {
     active = false,
@@ -105,7 +105,7 @@ hl.on("window.close", function(w)
 end)
 
 -- ═══════════════════════════════════════════
--- 5. ZEN MODE (Focus Tracker & Bar Gizleme)
+-- 5. ZEN MODE Focus Tracker & Bar Gizleme
 -- ═══════════════════════════════════════════
 hl.on("window.active", function(w)
     if not w then return end

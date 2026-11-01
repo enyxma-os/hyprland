@@ -3,7 +3,7 @@
 -- Boşluklar kenarlık renkler yerleşim ve animasyonlar
 -- =====================================================
 
--- Matugen dinamik renklerini güvenli şekilde yükle (Fail-Safe)
+-- Matugen dinamik renklerini güvenli şekilde yükle Fail-Safe
 local function load_dynamic_colors()
     local xdg = os.getenv("XDG_CONFIG_HOME")
     local home = os.getenv("HOME")

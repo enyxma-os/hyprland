@@ -60,6 +60,10 @@ in {
       libnotify
       kitty
       foot
+      hyprlock
+      hypridle
+      yazi
+      thunar
     ];
   };
 }
