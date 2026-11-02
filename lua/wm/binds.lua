@@ -38,10 +38,10 @@ local app_launcher     = get_env("MENU") or qs_call("launcher", "toggle")
 local web_browser      = get_env("BROWSER") or find_first_binary({ "librewolf", "firefox", "brave", "chromium", "google-chrome-stable" })
 local screen_lock      = find_first_binary({ "hyprlock", "swaylock" })
 
--- Ekran görüntüsü ve pano araçları Enyxma Shot & yedek mekanizmalar
-local enyxma_shot       = "( command -v enyxma-shot >/dev/null 2>&1 && enyxma-shot ) || ( [ -f \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" ] && flock -n -o \"${XDG_RUNTIME_DIR:-/tmp}/enyxma-shot.lock\" quickshell -p \"$HOME/.config/quickshell/modules/screenshot/shell.qml\" )"
-local screenshot_screen = enyxma_shot .. " || ( command -v grimblast >/dev/null 2>&1 && grimblast copysave screen ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m output ) || ( command -v grim >/dev/null 2>&1 && grim ) || true"
-local screenshot_region = enyxma_shot .. " || ( command -v grimblast >/dev/null 2>&1 && grimblast copysave area ) || ( command -v hyprshot >/dev/null 2>&1 && hyprshot -m region ) || ( command -v slurp >/dev/null 2>&1 && command -v grim >/dev/null 2>&1 && grim -g \"$(slurp)\" ) || true"
+-- Ekran goruntusu alma komutlari
+local screenshot_screen = "sh -c 'grim - | wl-copy && notify-send \"Ekran Goruntusu\" \"Tam ekran panoya kopyalandi\" -t 2000'"
+local screenshot_region = "sh -c 'grim -g \"$(slurp)\" - | wl-copy && notify-send \"Ekran Alintisi\" \"Secilen alan panoya kopyalandi\" -t 2000'"
+local screenshot_save   = "sh -c 'mkdir -p ~/Pictures/Screenshots && FILE=~/Pictures/Screenshots/enyxma_$(date +%Y%m%d_%H%M%S).png && grim -g \"$(slurp)\" \"$FILE\" && wl-copy < \"$FILE\" && notify-send \"Ekran Alintisi Kaydedildi\" \"$FILE\" -t 2000'"
 local clipboard_menu    = "( command -v cliphist >/dev/null 2>&1 && command -v rofi >/dev/null 2>&1 && cliphist list | rofi -dmenu | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v fuzzel >/dev/null 2>&1 && cliphist list | fuzzel -d | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v wofi >/dev/null 2>&1 && cliphist list | wofi --dmenu | cliphist decode | wl-copy ) || true"
 
 -- =====================================================
@@ -60,10 +60,10 @@ hl.bind(MOD .. " + SHIFT + V", hl.dsp.exec_cmd(clipboard_menu))
 hl.bind(MOD .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(MOD .. " + SHIFT + E", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 
--- Ekran görüntüsü kısayolları Enyxma Shot: Print, Shift+Print, Super+Shift+S
+-- Ekran goruntusu kisayollari
 hl.bind("Print", hl.dsp.exec_cmd(screenshot_screen))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_region))
-hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_region))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_save))
+hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_save))
 hl.bind(MOD .. " + SHIFT + S", hl.dsp.exec_cmd(screenshot_region))
 
 -- =====================================================
