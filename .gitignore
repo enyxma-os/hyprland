@@ -1,14 +1,5 @@
-# Editör ve geçici dosyalar
-*~
-*.swp
-*.swo
-*.bak
-*.log
-
-# Nix derleme çıktıları
+# Nix Derleme ve Ortam Ciktilari
 result
 result-*
-
-# Çevre ve önbellek
+.cache/
 .direnv/
-.DS_Store
