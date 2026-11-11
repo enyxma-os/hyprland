@@ -144,7 +144,9 @@ hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
 -- Çeşitli ayarlar
 hl.config({
     misc = {
-        force_default_wallpaper = -1,
+        force_default_wallpaper = 0,
         disable_hyprland_logo   = true,
+        disable_splash_rendering = true,
+        background_color        = "0x0b0f14",
     },
 })
