@@ -28,7 +28,8 @@ end
 
 -- Tercih edilen uygulamalar
 local function qs_call(target, action)
-    return "quickshell -p $HOME/.local/share/enyxma-shell/0.2.0/shell.qml ipc call " .. target .. " " .. action
+    local qs_path = get_env("QS_CONFIG_PATH") or "$HOME/.local/share/enyxma-shell/runtime/shell.qml"
+    return "quickshell -p " .. qs_path .. " ipc call " .. target .. " " .. action
 end
 
 local terminal         = get_env("TERMINAL") or "kitty -o remember_window_size=no"

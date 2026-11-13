@@ -40,7 +40,7 @@ local ROOT_DIR = detect_root_dir()
 -- Böylece modül çözümlemesi her sistemde aynı şekilde çalışır
 if package and package.path then
     local old_path = package.path or ""
-    package.path = ROOT_DIR .. "/?.lua;" .. ROOT_DIR .. "/?/init.lua;" .. old_path
+    package.path = ROOT_DIR .. "/?.lua;" .. ROOT_DIR .. "/?/init.lua;/etc/xdg/hypr/?.lua;/etc/xdg/hypr/?/init.lua;" .. old_path
 end
 
 -- Sessiz uyarı yardımcısı
@@ -61,14 +61,24 @@ local function load_module(mod_name)
     end
 
     if dofile then
-        local path = ROOT_DIR .. "/" .. mod_name:gsub("%.", "/") .. ".lua"
-        local ok2, res2 = pcall(dofile, path)
-        if ok2 then
-            return res2
+        local rel = mod_name:gsub("%.", "/") .. ".lua"
+        local candidates = {
+            ROOT_DIR .. "/" .. rel,
+            "/etc/xdg/hypr/" .. rel,
+        }
+        for _, path in ipairs(candidates) do
+            local f = io.open(path, "r")
+            if f then
+                f:close()
+                local ok2, res2 = pcall(dofile, path)
+                if ok2 then
+                    return res2
+                end
+                warn("dofile hatası " .. tostring(res2))
+            end
         end
         warn("enyxma uyarısı modül yüklenemedi " .. mod_name)
         warn("require hatası " .. tostring(res))
-        warn("dofile hatası " .. tostring(res2))
         return nil
     end
 

@@ -35,7 +35,7 @@ end
 -- Enyxma Shell Quickshell IPC çağrısı Örn: Utils.qs_ipc"enyxma-bar", "hide"
 function Utils.qs_ipc(target, action)
     if action == "show" then action = "reveal" end
-    local qs_path = os.getenv("QS_CONFIG_PATH") or "$HOME/.local/share/enyxma-shell/0.2.0/shell.qml"
+    local qs_path = os.getenv("QS_CONFIG_PATH") or "$HOME/.local/share/enyxma-shell/runtime/shell.qml"
     Utils.async_cmd(string.format("quickshell -p %s ipc call %s %s", qs_path, target, action))
 end
 
