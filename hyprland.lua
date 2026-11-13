@@ -54,6 +54,9 @@ end
 -- Her modül kendi Lua kapsamında çalışır
 -- Bir modül hata verse bile diğer modüller çalışmaya devam eder
 local function load_module(mod_name)
+    if package and package.loaded then
+        package.loaded[mod_name] = nil
+    end
     local ok, res = pcall(require, mod_name)
 
     if ok then

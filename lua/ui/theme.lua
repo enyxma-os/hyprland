@@ -29,7 +29,8 @@ end
 
 local dyn = load_dynamic_colors()
 local active_a = (dyn and dyn.accent) or "rgba(7aa2f7ee)"
-local active_b = (dyn and dyn.outline) or "rgba(bb9af7ee)"
+local active_b = (dyn and (dyn.accent_secondary or dyn.outline)) or "rgba(bb9af7ee)"
+local inactive_col = (dyn and dyn.outline) or "rgba(3b4261aa)"
 
 -- Genel görünüm ayarları
 hl.config({
@@ -41,7 +42,7 @@ hl.config({
 
         col = {
             active_border   = { colors = { active_a, active_b }, angle = 45 },
-            inactive_border = "rgba(3b4261aa)",
+            inactive_border = inactive_col,
         },
 
         resize_on_border = true,
