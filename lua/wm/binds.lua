@@ -147,8 +147,8 @@ hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&1 && wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- || pactl set-sink-volume @DEFAULT_SINK@ -5%"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&1 && wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle || pactl set-sink-mute @DEFAULT_SINK@ toggle"), { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&1 && wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle || pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("([ -f ~/.config/hypr/scripts/brightness.sh ] && ~/.config/hypr/scripts/brightness.sh +5) || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%+)"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("([ -f ~/.config/hypr/scripts/brightness.sh ] && ~/.config/hypr/scripts/brightness.sh -5) || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%-)"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("([ -f ~/.config/hypr/scripts/brightness.sh ] && ~/.config/hypr/scripts/brightness.sh +5) || ([ -f /etc/xdg/hypr/scripts/brightness.sh ] && /etc/xdg/hypr/scripts/brightness.sh +5) || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%+)"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("([ -f ~/.config/hypr/scripts/brightness.sh ] && ~/.config/hypr/scripts/brightness.sh -5) || ([ -f /etc/xdg/hypr/scripts/brightness.sh ] && /etc/xdg/hypr/scripts/brightness.sh -5) || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%-)"), { locked = true, repeating = true })
 
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })

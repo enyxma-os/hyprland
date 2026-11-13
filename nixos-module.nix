@@ -44,6 +44,8 @@ in {
       "xdg/hypr/lua".source = ./lua;
       "xdg/hypr/configs".source = ./configs;
       "xdg/hypr/scripts".source = ./scripts;
+      "xdg/hypr/hyprlock.conf".source = ./configs/hyprlock.conf;
+      "xdg/hypr/hypridle.conf".source = ./configs/hypridle.conf;
     };
 
     environment.systemPackages = with pkgs; [
