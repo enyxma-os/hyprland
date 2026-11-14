@@ -30,5 +30,19 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("command -v cliphist >/dev/null 2>&1 && command -v wl-paste >/dev/null 2>&1 && wl-paste --watch cliphist store")
 
     -- 8. İmleç teması ve boyutu
-    hl.exec_cmd("command -v hyprctl >/dev/null 2>&1 && hyprctl setcursor Adwaita 24")
+    local cursor_theme = "Bibata-Modern-Ice"
+    local cursor_size = 24
+    local home = os.getenv("HOME")
+    if home then
+        local ok, cols = pcall(dofile, home .. "/.config/hypr/colors.lua")
+        if ok and type(cols) == "table" then
+            if type(cols.cursor_theme) == "string" and cols.cursor_theme ~= "" then
+                cursor_theme = cols.cursor_theme:gsub("[^%w%-%_]", "")
+            end
+            if type(cols.cursor_size) == "number" then
+                cursor_size = math.floor(cols.cursor_size)
+            end
+        end
+    end
+    hl.exec_cmd(string.format("command -v hyprctl >/dev/null 2>&1 && (hyprctl setcursor %s %d || hyprctl setcursor Adwaita %d)", cursor_theme, cursor_size, cursor_size))
 end)

@@ -31,14 +31,18 @@ local dyn = load_dynamic_colors()
 local active_a = (dyn and dyn.accent) or "rgba(7aa2f7ee)"
 local active_b = (dyn and (dyn.accent_secondary or dyn.outline)) or "rgba(bb9af7ee)"
 local inactive_col = (dyn and dyn.outline) or "rgba(3b4261aa)"
+local gaps_in = (dyn and dyn.gaps_in) or 5
+local gaps_out = (dyn and dyn.gaps_out) or 10
+local border_size = (dyn and dyn.border_size) or 2
+local rounding = (dyn and dyn.rounding) or 10
 
 -- Genel görünüm ayarları
 hl.config({
     general = {
-        gaps_in  = 5,
-        gaps_out = 10,
+        gaps_in  = gaps_in,
+        gaps_out = gaps_out,
 
-        border_size = 2,
+        border_size = border_size,
 
         col = {
             active_border   = { colors = { active_a, active_b }, angle = 45 },
@@ -55,7 +59,7 @@ hl.config({
 -- Süsleme ayarları
 hl.config({
     decoration = {
-        rounding       = 10,
+        rounding       = rounding,
         rounding_power = 2,
 
         active_opacity   = 1.0,
