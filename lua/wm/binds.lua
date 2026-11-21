@@ -161,7 +161,6 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 -- =====================================================
 hl.bind(MOD .. " + space", hl.dsp.exec_cmd(qs_call("launcher", "toggle")))
 hl.bind(MOD .. " + ALT + space", hl.dsp.exec_cmd(qs_call("launcher", "menu")))
-hl.bind(MOD .. " + slash", hl.dsp.exec_cmd(qs_call("launcher", "keys")))
 hl.bind(MOD .. " + D", hl.dsp.exec_cmd(qs_call("dashboard", "toggle")))
 hl.bind(MOD .. " + B", hl.dsp.exec_cmd(qs_call("bar", "toggle")))
 hl.bind(MOD .. " + N", hl.dsp.exec_cmd(qs_call("notifications", "toggle")))
