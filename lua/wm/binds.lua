@@ -42,8 +42,8 @@ local screen_lock      = find_first_binary({ "hyprlock", "swaylock" })
 -- Ekran goruntusu alma komutlari
 local screenshot_screen = "sh -c 'grim - | wl-copy && notify-send \"Ekran Goruntusu\" \"Tam ekran panoya kopyalandi\" -t 2000'"
 local screenshot_region = "sh -c 'grim -g \"$(slurp)\" - | wl-copy && notify-send \"Ekran Alintisi\" \"Secilen alan panoya kopyalandi\" -t 2000'"
-local screenshot_save   = "sh -c 'mkdir -p ~/Pictures/Screenshots && FILE=~/Pictures/Screenshots/enyxma_$(date +%Y%m%d_%H%M%S).png && grim -g \"$(slurp)\" \"$FILE\" && wl-copy < \"$FILE\" && notify-send \"Ekran Alintisi Kaydedildi\" \"$FILE\" -t 2000'"
-local clipboard_menu    = "( command -v cliphist >/dev/null 2>&1 && command -v rofi >/dev/null 2>&1 && cliphist list | rofi -dmenu | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v fuzzel >/dev/null 2>&1 && cliphist list | fuzzel -d | cliphist decode | wl-copy ) || ( command -v cliphist >/dev/null 2>&1 && command -v wofi >/dev/null 2>&1 && cliphist list | wofi --dmenu | cliphist decode | wl-copy ) || true"
+local screenshot_studio = "( command -v enyxma-shot >/dev/null 2>&1 && enyxma-shot ) || " .. screenshot_region
+local clipboard_menu    = qs_call("launcher", "clipboard")
 
 -- =====================================================
 -- UYGULAMA KISAYOLLARI
@@ -63,9 +63,9 @@ hl.bind(MOD .. " + SHIFT + E", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/nu
 
 -- Ekran goruntusu kisayollari
 hl.bind("Print", hl.dsp.exec_cmd(screenshot_screen))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_save))
-hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_save))
-hl.bind(MOD .. " + SHIFT + S", hl.dsp.exec_cmd(screenshot_region))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_studio))
+hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_studio))
+hl.bind(MOD .. " + SHIFT + S", hl.dsp.exec_cmd(screenshot_studio))
 
 -- =====================================================
 -- PENCERE DURUMLARI
@@ -160,6 +160,8 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 -- ENYXMA SHELL IPC KISAYOLLARI
 -- =====================================================
 hl.bind(MOD .. " + space", hl.dsp.exec_cmd(qs_call("launcher", "toggle")))
+hl.bind(MOD .. " + ALT + space", hl.dsp.exec_cmd(qs_call("launcher", "menu")))
+hl.bind(MOD .. " + slash", hl.dsp.exec_cmd(qs_call("launcher", "keys")))
 hl.bind(MOD .. " + D", hl.dsp.exec_cmd(qs_call("dashboard", "toggle")))
 hl.bind(MOD .. " + B", hl.dsp.exec_cmd(qs_call("bar", "toggle")))
 hl.bind(MOD .. " + N", hl.dsp.exec_cmd(qs_call("notifications", "toggle")))
