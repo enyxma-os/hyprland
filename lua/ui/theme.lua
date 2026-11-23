@@ -7,11 +7,14 @@
 local function load_dynamic_colors()
     local xdg = os.getenv("XDG_CONFIG_HOME")
     local home = os.getenv("HOME")
-    local candidates = {
-        (xdg and (xdg .. "/hypr/colors.lua")),
-        (home and (home .. "/.config/hypr/colors.lua")),
-        "colors.lua",
-    }
+    local candidates = {}
+    if xdg and xdg ~= "" then
+        candidates[#candidates + 1] = xdg .. "/hypr/colors.lua"
+    end
+    if home and home ~= "" then
+        candidates[#candidates + 1] = home .. "/.config/hypr/colors.lua"
+    end
+    candidates[#candidates + 1] = "colors.lua"
     for _, path in ipairs(candidates) do
         if path then
             local f = io.open(path, "r")
@@ -31,10 +34,10 @@ local dyn = load_dynamic_colors()
 local active_a = (dyn and dyn.accent) or "rgba(7aa2f7ee)"
 local active_b = (dyn and (dyn.accent_secondary or dyn.outline)) or "rgba(bb9af7ee)"
 local inactive_col = (dyn and dyn.outline) or "rgba(3b4261aa)"
-local gaps_in = (dyn and dyn.gaps_in) or 5
-local gaps_out = (dyn and dyn.gaps_out) or 10
-local border_size = (dyn and dyn.border_size) or 2
-local rounding = (dyn and dyn.rounding) or 10
+local gaps_in = (dyn and dyn.gaps_in ~= nil) and dyn.gaps_in or 5
+local gaps_out = (dyn and dyn.gaps_out ~= nil) and dyn.gaps_out or 10
+local border_size = (dyn and dyn.border_size ~= nil) and dyn.border_size or 2
+local rounding = (dyn and dyn.rounding ~= nil) and dyn.rounding or 10
 
 -- Genel görünüm ayarları
 hl.config({
