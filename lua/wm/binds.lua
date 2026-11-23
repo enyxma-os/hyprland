@@ -42,7 +42,7 @@ local screen_lock      = find_first_binary({ "hyprlock", "swaylock" })
 -- Ekran goruntusu alma komutlari
 local screenshot_screen = "sh -c 'grim - | wl-copy && notify-send \"Ekran Goruntusu\" \"Tam ekran panoya kopyalandi\" -t 2000'"
 local screenshot_region = "sh -c 'grim -g \"$(slurp)\" - | wl-copy && notify-send \"Ekran Alintisi\" \"Secilen alan panoya kopyalandi\" -t 2000'"
-local screenshot_studio = "( command -v enyxma-shot >/dev/null 2>&1 && enyxma-shot ) || " .. screenshot_region
+local screenshot_studio = "if command -v enyxma-shot >/dev/null 2>&1; then enyxma-shot; else " .. screenshot_region .. "; fi"
 local clipboard_menu    = qs_call("launcher", "clipboard")
 
 -- =====================================================
