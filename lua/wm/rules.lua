@@ -117,6 +117,10 @@ hl.config({
         "float, class:^(steam)$",
         "tile, class:^(steam)$, title:^(Steam)$",
 
+        -- Resim İçinde Resim en-boy oranı koruması
+        "keepaspectratio, title:^(Picture-in-Picture)$",
+        "keepaspectratio, title:^(Picture in picture)$",
+
         -- Geliştirici Ortamı Opasitesi Glassmorphism Derinliği
         "opacity 0.95 0.90, class:^(code)$",
         "opacity 0.95 0.90, class:^(Code)$",

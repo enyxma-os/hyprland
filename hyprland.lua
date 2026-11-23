@@ -99,3 +99,25 @@ load_module("lua.wm.rules")
 load_module("lua.wm.events")
 load_module("lua.wm.binds")
 load_module("lua.core.autostart")
+
+-- İsteğe bağlı makineye özel yerel ek yapılandırma
+local local_cfg_candidates = {}
+local xdg_cfg = os.getenv("XDG_CONFIG_HOME")
+if xdg_cfg and xdg_cfg ~= "" then
+    local_cfg_candidates[#local_cfg_candidates + 1] = xdg_cfg .. "/hypr/local.lua"
+end
+local home_cfg = os.getenv("HOME")
+if home_cfg and home_cfg ~= "" then
+    local_cfg_candidates[#local_cfg_candidates + 1] = home_cfg .. "/.config/hypr/local.lua"
+end
+for _, path in ipairs(local_cfg_candidates) do
+    local f = io.open(path, "r")
+    if f then
+        f:close()
+        local ok_local, err_local = pcall(dofile, path)
+        if not ok_local then
+            warn("enyxma local.lua hatası " .. tostring(err_local))
+        end
+        break
+    end
+end

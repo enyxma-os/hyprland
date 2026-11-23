@@ -73,6 +73,12 @@ end
 
 local IS_VM = is_virtual_machine()
 
+-- İsteğe bağlı harici DRM cihaz yolu kancası
+local custom_drm = get_env("ENYXMA_DRM_DEVICES")
+if custom_drm then
+    hl.env("AQ_DRM_DEVICES", custom_drm)
+end
+
 -- =====================================================
 -- MONITOR AYARLARI
 -- =====================================================
@@ -115,6 +121,7 @@ hl.config({
         numlock_by_default = true,
         follow_mouse = 1,
         sensitivity = 0,
+        accel_profile = get_env("ENYXMA_ACCEL_PROFILE") or "",
 
         touchpad = {
             natural_scroll = false,
@@ -134,10 +141,12 @@ hl.gesture({
 -- =====================================================
 
 -- no_hardware_cursors değeri 2 otomatik seçim anlamına gelir
--- Sanal makinede yazılım imleci zorlanır
+-- Sanal makinede veya ENYXMA_NO_HW_CURSORS tanımlıysa yazılım imleci zorlanır
+local hw_cursor_override = get_env("ENYXMA_NO_HW_CURSORS")
+local no_hw_cursors = (IS_VM or hw_cursor_override == "1" or hw_cursor_override == "true") and 1 or 2
 hl.config({
     cursor = {
-        no_hardware_cursors = IS_VM and 1 or 2,
+        no_hardware_cursors = no_hw_cursors,
         enable_hyprcursor = true,
         sync_gsettings_theme = true,
     },

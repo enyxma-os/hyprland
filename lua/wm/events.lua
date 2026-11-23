@@ -121,12 +121,12 @@ hl.on("window.active", function(w)
         hl.config({
             decoration = { dim_inactive = true, dim_strength = 0.4 }
         })
-        Utils.qs_ipc("enyxma-bar", "hide")
+        Utils.qs_ipc("bar", "hide")
     else
         hl.config({
             decoration = { dim_inactive = false, dim_strength = 0.0 }
         })
-        Utils.qs_ipc("enyxma-bar", "reveal")
+        Utils.qs_ipc("bar", "reveal")
     end
 end)
 
