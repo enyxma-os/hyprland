@@ -40,10 +40,11 @@ local web_browser      = get_env("BROWSER") or find_first_binary({ "librewolf", 
 local screen_lock      = find_first_binary({ "hyprlock", "swaylock" })
 
 -- Ekran goruntusu alma komutlari
-local screenshot_screen = "sh -c 'grim - | wl-copy && notify-send \"Ekran Goruntusu\" \"Tam ekran panoya kopyalandi\" -t 2000'"
-local screenshot_region = "sh -c 'grim -g \"$(slurp)\" - | wl-copy && notify-send \"Ekran Alintisi\" \"Secilen alan panoya kopyalandi\" -t 2000'"
-local screenshot_studio = "if command -v enyxma-shot >/dev/null 2>&1; then enyxma-shot; else " .. screenshot_region .. "; fi"
-local clipboard_menu    = qs_call("launcher", "clipboard")
+local screenshot_screen    = "sh -c 'grim - | wl-copy && notify-send -a \"Enyxma\" \"Ekran Goruntusu\" \"Tam ekran panoya kopyalandi\" -t 2000'"
+local screenshot_region    = "sh -c 'grim -g \"$(slurp)\" - | wl-copy && notify-send -a \"Enyxma\" \"Ekran Alintisi\" \"Secilen alan panoya kopyalandi\" -t 2000'"
+local screenshot_save_full = "sh -c 'mkdir -p \"$HOME/Pictures/Screenshots\" && FILE=\"$HOME/Pictures/Screenshots/enyxma_$(date +%Y%m%d_%H%M%S).png\" && grim \"$FILE\" && notify-send -a \"Enyxma\" \"Ekran Goruntusu\" \"$FILE\" -t 2000'"
+local screenshot_studio    = "if command -v enyxma-shot >/dev/null 2>&1; then enyxma-shot; else " .. screenshot_region .. "; fi"
+local clipboard_menu       = qs_call("launcher", "clipboard")
 
 -- =====================================================
 -- UYGULAMA KISAYOLLARI
@@ -66,6 +67,7 @@ hl.bind("Print", hl.dsp.exec_cmd(screenshot_screen))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot_studio))
 hl.bind(MOD .. " + Print", hl.dsp.exec_cmd(screenshot_studio))
 hl.bind(MOD .. " + SHIFT + S", hl.dsp.exec_cmd(screenshot_studio))
+hl.bind(MOD .. " + ALT + S", hl.dsp.exec_cmd(screenshot_save_full))
 
 -- =====================================================
 -- PENCERE DURUMLARI
@@ -102,7 +104,7 @@ for _, direction in ipairs(directions) do
     hl.bind(MOD .. " + CTRL + " .. direction, hl.dsp.window.swap({ direction = direction }))
 
     local delta = resize_deltas[direction]
-    hl.bind(MOD .. " + SHIFT + CTRL + " .. direction, hl.dsp.window.resize({ x = delta.x, y = delta.y, relative = true }))
+    hl.bind(MOD .. " + SHIFT + CTRL + " .. direction, hl.dsp.window.resize({ x = delta.x, y = delta.y, relative = true }), { repeating = true })
 end
 
 -- =====================================================
@@ -147,8 +149,8 @@ hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&1 && wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- || pactl set-sink-volume @DEFAULT_SINK@ -5%"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&1 && wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle || pactl set-sink-mute @DEFAULT_SINK@ toggle"), { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("command -v wpctl >/dev/null 2>&1 && wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle || pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("([ -f ~/.config/hypr/scripts/brightness.sh ] && ~/.config/hypr/scripts/brightness.sh +5) || ([ -f /etc/xdg/hypr/scripts/brightness.sh ] && /etc/xdg/hypr/scripts/brightness.sh +5) || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%+)"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("([ -f ~/.config/hypr/scripts/brightness.sh ] && ~/.config/hypr/scripts/brightness.sh -5) || ([ -f /etc/xdg/hypr/scripts/brightness.sh ] && /etc/xdg/hypr/scripts/brightness.sh -5) || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%-)"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(qs_call("brightness", "stepUp") .. " || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%+)"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(qs_call("brightness", "stepDown") .. " || (command -v brightnessctl >/dev/null 2>&1 && brightnessctl -e4 -n2 set 5%-)"), { locked = true, repeating = true })
 
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
