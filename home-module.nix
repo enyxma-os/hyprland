@@ -64,21 +64,25 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable || config.enyxma.hyprland.enable) {
-    xdg.configFile."hypr/hyprland.lua".source = lib.mkDefault (resolveSource ./hyprland.lua "hyprland.lua");
-    xdg.configFile."hypr/lua".source = lib.mkDefault (resolveSource ./lua "lua");
-    xdg.configFile."hypr/hyprlock.conf".source = lib.mkDefault (resolveSource ./configs/hyprlock.conf "configs/hyprlock.conf");
-    xdg.configFile."hypr/hypridle.conf".source = lib.mkDefault (resolveSource ./configs/hypridle.conf "configs/hypridle.conf");
-    xdg.configFile."hypr/scripts".source = lib.mkDefault (resolveSource ./scripts "scripts");
+  config = mkIf (cfg.enable || config.enyxma.hyprland.enable) (lib.mkMerge [
+    {
+      xdg.configFile."hypr/hyprland.lua".source = lib.mkDefault (resolveSource ./hyprland.lua "hyprland.lua");
+      xdg.configFile."hypr/lua".source = lib.mkDefault (resolveSource ./lua "lua");
+      xdg.configFile."hypr/hyprlock.conf".source = lib.mkDefault (resolveSource ./configs/hyprlock.conf "configs/hyprlock.conf");
+      xdg.configFile."hypr/hypridle.conf".source = lib.mkDefault (resolveSource ./configs/hypridle.conf "configs/hypridle.conf");
+      xdg.configFile."hypr/scripts".source = lib.mkDefault (resolveSource ./scripts "scripts");
 
-    home.activation.createScreenshotsDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      mkdir -p "$HOME/Pictures/Screenshots"
-    '';
-
-    xdg.configFile."fastfetch/config.jsonc".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/fastfetch.jsonc "configs/fastfetch.jsonc"));
-    xdg.configFile."starship.toml".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/starship.toml "configs/starship.toml"));
-    xdg.configFile."foot/foot.ini".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/foot.ini "configs/foot.ini"));
-    xdg.configFile."kitty/kitty.conf".source = lib.mkIf cfg.terminal.enable (lib.mkDefault (resolveSource ./configs/kitty.conf "configs/kitty.conf"));
+      home.activation.createScreenshotsDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        mkdir -p "$HOME/Pictures/Screenshots"
+      '';
+    }
+    (mkIf cfg.terminal.enable {
+      xdg.configFile."fastfetch/config.jsonc".source = lib.mkDefault (resolveSource ./configs/fastfetch.jsonc "configs/fastfetch.jsonc");
+      xdg.configFile."starship.toml".source = lib.mkDefault (resolveSource ./configs/starship.toml "configs/starship.toml");
+      xdg.configFile."foot/foot.ini".source = lib.mkDefault (resolveSource ./configs/foot.ini "configs/foot.ini");
+      xdg.configFile."kitty/kitty.conf".source = lib.mkDefault (resolveSource ./configs/kitty.conf "configs/kitty.conf");
+    })
+    {
 
     programs.bash = lib.mkIf cfg.terminal.enable {
       enable = lib.mkDefault true;
@@ -141,5 +145,6 @@ in {
         foot
         kitty
       ];
-  };
+    }
+  ]);
 }
