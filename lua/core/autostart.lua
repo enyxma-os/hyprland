@@ -21,7 +21,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("( command -v awww-daemon >/dev/null 2>&1 && awww-daemon ) || ( command -v swww-daemon >/dev/null 2>&1 && swww-daemon ) || true")
 
     -- 5. Güç yönetimi ve ekran kilidi zamanlayıcısı
-    hl.exec_cmd("command -v hypridle >/dev/null 2>&1 && hypridle")
+    hl.exec_cmd("if command -v hypridle >/dev/null 2>&1; then if [ -f \"$HOME/.config/enyxma/hypridle.conf\" ]; then hypridle -c \"$HOME/.config/enyxma/hypridle.conf\"; else hypridle; fi; fi")
 
     -- 6. Polkit yetki istemcisi
     hl.exec_cmd("( command -v hyprpolkitagent >/dev/null 2>&1 && hyprpolkitagent ) || ( command -v polkit-gnome-authentication-agent-1 >/dev/null 2>&1 && polkit-gnome-authentication-agent-1 ) || ( command -v lxpolkit >/dev/null 2>&1 && lxpolkit ) || true")

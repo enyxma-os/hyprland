@@ -27,6 +27,17 @@ local function find_first_binary(candidates)
 end
 
 -- Tercih edilen uygulamalar
+local function read_enyxma_setting(key)
+    local home = get_env("HOME")
+    if not home then return nil end
+    local f = io.open(home .. "/.config/enyxma/settings.json", "r")
+    if not f then return nil end
+    local content = f:read("*a")
+    f:close()
+    if not content then return nil end
+    return content:match('"' .. key .. '"%s*:%s*"([^"]+)"')
+end
+
 local function qs_call(target, action)
     local qs_path = get_env("QS_CONFIG_PATH") or "$HOME/.local/share/enyxma-shell/runtime/shell.qml"
     return "quickshell -p " .. qs_path .. " ipc call " .. target .. " " .. action
@@ -50,10 +61,33 @@ local clipboard_menu       = qs_call("launcher", "clipboard")
 -- UYGULAMA KISAYOLLARI
 -- =====================================================
 
-hl.bind(MOD .. " + Return", hl.dsp.exec_cmd(terminal))
+hl.bind(MOD .. " + Return", function()
+    local pref = read_enyxma_setting("defaultTerminal")
+    if pref == "foot" then
+        hl.exec_cmd("foot")
+    elseif pref == "kitty" then
+        hl.exec_cmd("kitty -o remember_window_size=no")
+    else
+        hl.exec_cmd(terminal)
+    end
+end)
 hl.bind(MOD .. " + Q", hl.dsp.window.close())
 hl.bind(MOD .. " + SHIFT + Q", hl.dsp.window.kill())
-hl.bind(MOD .. " + E", hl.dsp.exec_cmd(file_manager))
+hl.bind(MOD .. " + E", function()
+    local pref = read_enyxma_setting("defaultFileManager")
+    if pref == "yazi" then
+        local term = read_enyxma_setting("defaultTerminal")
+        if term == "foot" then
+            hl.exec_cmd("foot -e yazi")
+        else
+            hl.exec_cmd("kitty -o remember_window_size=no -e yazi")
+        end
+    elseif pref == "nautilus" or pref == "thunar" then
+        hl.exec_cmd("command -v " .. pref .. " >/dev/null 2>&1 && " .. pref .. " || " .. file_manager)
+    else
+        hl.exec_cmd(file_manager)
+    end
+end)
 hl.bind(MOD .. " + Y", hl.dsp.exec_cmd(tui_file_manager))
 hl.bind(MOD .. " + R", hl.dsp.exec_cmd(app_launcher))
 hl.bind(MOD .. " + W", hl.dsp.exec_cmd(web_browser))
