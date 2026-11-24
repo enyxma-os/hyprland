@@ -7,6 +7,10 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 ## Mimari Özellikler
 
 - **Saf Lua Standardı:** Tüm yapılandırma Hyprland C++ Lua bağlayıcıları üzerinde çalışır. Harici eski yapılandırma dosyasına ihtiyaç duymaz.
+- **Enyxma Shell Canlı Entegrasyonu:**
+  - `~/.config/enyxma/settings.json` üzerinden varsayılan uçbirim ve dosya yöneticisini anlık okur.
+  - Oturum açılışında `~/.config/enyxma/hypridle.conf` dosyasını otomatik algılayarak Enyxma Ayarlar ile senkronize ekran kilidi ve DPMS yönetimi sağlar.
+  - `hyprctl eval` üzerinden Enyxma Ayarlar 2.0 değişikliklerini yeniden başlatma olmadan uygular.
 - **Nix Flake ve Modül Desteği:** Hem NixOS sistem modülü hem de Home Manager kullanıcı modülü sunar. Deklaratif kurulumu ve canlı geliştirme modunu destekler.
 - **İzole İsim Alanı:** `enyxma.desktop.hyprland` isim alanı kullanılarak diğer harici Flake modülleriyle olası çakışmalar kökten engellenmiştir.
 - **Otomatik Çakışma Denetimi:** Özel tarayıcı script ile kısayol tuş çakışmaları daha commit atılmadan yerel denetimle yakalanır.
@@ -29,12 +33,12 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 ├── hyprland.lua           # Ana giriş noktası ve güvenli modül yükleyici
 ├── lua
 │   ├── core
-│   │   ├── autostart.lua  # Arka plan servisleri ve ortam değişkenleri
+│   │   ├── autostart.lua  # Arka plan servisleri, hypridle ve ortam değişkenleri
 │   │   └── hardware.lua   # Donanım, ekran, Türkçe klavye ve imleç
 │   ├── ui
 │   │   └── theme.lua      # Renkler, yay eğrileri, animasyonlar ve dwindle
 │   └── wm
-│       ├── binds.lua      # Kısayollar, fare hareketleri, ekran görüntüsü ve pano
+│       ├── binds.lua      # Kısayollar, dinamik settings.json okuyucu ve pano
 │       └── rules.lua      # Pencere kuralları ve katman ayarları
 └── scripts
     └── check-binds.py     # Otomatik kısayol çakışma denetleyicisi
@@ -48,28 +52,34 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 
 | Tuş | İşlev |
 | :--- | :--- |
-| SUPER + Return | Uçbirim çalıştır |
+| SUPER + Return | Varsayılan uçbirimi çalıştır |
 | SUPER + Q | Aktif pencereyi kapat |
 | SUPER + SHIFT + Q | Pencereyi zorla sonlandır |
-| SUPER + E | Dosya yöneticisini aç |
+| SUPER + E | Varsayılan dosya yöneticisini aç |
+| SUPER + Y | Yazi dosya yöneticisini uçbirimde aç |
 | SUPER + R | Uygulama başlatıcısını aç |
 | SUPER + W | Web tarayıcısını aç |
 | SUPER + L | Ekranı kilitle |
+| SUPER + I | Enyxma Ayarlar 2.0 penceresini aç veya kapat |
+| SUPER + T | Gotham ve Dinamik tema arasında geçiş yap |
+| SUPER + SHIFT + T | Duvar kağıdı galerisini aç |
+| SUPER + S | Yerel AI yan panelini aç veya kapat |
 | SUPER + SHIFT + V | Pano geçmişi menüsünü aç |
 | SUPER + SHIFT + R | Hyprland yapılandırmasını yeniden yükle |
 | SUPER + SHIFT + E | Oturumdan çıkış yap |
 | SUPER + N | Enyxma Bildirim Merkezini aç veya kapat |
-| SUPER + D | Enyxma Kontrol Merkezini (CC / Dashboard) aç veya kapat |
+| SUPER + D | Enyxma Kontrol Merkezini aç veya kapat |
 | SUPER + B | Enyxma Üst Durum Çubuğunu aç veya kapat |
 | SUPER + Boşluk | Enyxma Omni Launcher arama menüsünü aç |
 
-### Ekran Görüntüsü (Enyxma Shot & Mockup)
+### Ekran Görüntüsü
 
 | Tuş | İşlev |
 | :--- | :--- |
 | Print | Tam ekran görüntüsü al ve panoya kopyala |
 | SHIFT + Print | Seçilen alan görüntüsü ve düzenleme moduna gir |
-| SUPER + SHIFT + S | Enyxma Shot ekran alma ve ✦ Mockup stüdyosuna gir |
+| SUPER + SHIFT + S | Enyxma Shot ekran alma ve Mockup stüdyosuna gir |
+| SUPER + ALT + S | Tam ekran görüntüsünü doğrudan dosyaya kaydet |
 | SUPER + Print | Seçilen alan görüntüsü al ve panoya kopyala |
 
 ### Pencere Yönetimi
@@ -81,8 +91,8 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 | SUPER + V | Yüzen pencere durumunu değiştir |
 | SUPER + P | Sahte döşeme durumuna geç |
 | SUPER + J | Bölünme yönünü değiştir |
-| SUPER + G | ✦ Gaming Modu (Saf 180Hz / Blur ve Animasyonları Anında Kapat) |
-| SUPER + SHIFT + G | Sekme grubunu aç veya kapat (Auto-Tab ile otomatik de yönetilir) |
+| SUPER + G | Gaming Modu — Blur ve Animasyonları Anında Kapat |
+| SUPER + SHIFT + G | Sekme grubunu aç veya kapat |
 | SUPER + Tab | Sonraki pencereye odaklan |
 | SUPER + C | Pencereyi ekranda ortala |
 
@@ -110,7 +120,6 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 | :--- | :--- |
 | SUPER + 1..9, 0 | Belirtilen çalışma alanına geç |
 | SUPER + SHIFT + 1..9, 0 | Pencereyi çalışma alanına taşı |
-| SUPER + S | Özel çalışma alanını aç veya kapat |
 | SUPER + SHIFT + M | Pencereyi özel çalışma alanına gönder |
 | SUPER + Fare Tekerleği | Çalışma alanları arasında sırayla gez |
 
