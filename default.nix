@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "Enyxma OS pure Lua Hyprland configuration framework";
     homepage = "https://codeberg.org/enyxma/hyprland";
-    license = licenses.mit;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

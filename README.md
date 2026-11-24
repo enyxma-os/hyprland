@@ -28,6 +28,7 @@ Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, mo
 ├── flake.nix              # Nix Flake giriş noktası ve modül çıktıları
 ├── home-module.nix        # Home Manager kullanıcı seviyesi modülü
 ├── Justfile               # Yönetim ve doğrulama komutları
+├── LICENSE                # GPL-3.0-or-later lisans metni
 ├── nixos-module.nix       # NixOS sistem seviyesi masaüstü modülü
 ├── README.md              # Belgelendirme
 ├── hyprland.lua           # Ana giriş noktası ve güvenli modül yükleyici
@@ -195,3 +196,9 @@ just check     # Lua, Nix ve kısayol çakışmalarını test eder
 just reload    # Yerel Hyprland oturumunu tazeler
 just sync      # Testleri çalıştırır ve depoya gönderir
 ```
+
+---
+
+## Lisans
+
+GPL-3.0-or-later — Ayrıntılar için [LICENSE](./LICENSE) dosyasına bakın. Telif Hakkı © 2026 Enyxma OS Contributors.
