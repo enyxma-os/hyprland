@@ -64,13 +64,23 @@ hl.window_rule({
     center = true,
 })
 
--- Resim içinde resim penceresi imlecin yanında açılır ve sabitlenir
+-- Resim içinde resim penceresi sağ alt köşede açılır ve sabitlenir
 hl.window_rule({
     name  = "picture-in-picture-floating",
     match = { title = "^(Picture-in-Picture|Picture in picture)$" },
     float = true,
     pin   = true,
-    move  = { "cursor_x-(window_w*0.5)", "cursor_y-(window_h*0.5)" },
+    size  = { "monitor_w*0.24", "monitor_h*0.24" },
+    move  = { "monitor_w-window_w-24", "monitor_h-window_h-24" },
+})
+
+-- Yüzer scratchpad uçbirimi
+hl.window_rule({
+    name  = "enyxma-scratchpad-floating",
+    match = { class = "^enyxma-scratchpad$" },
+    float  = true,
+    center = true,
+    size   = { "monitor_w*0.65", "monitor_h*0.65" },
 })
 
 -- Uçbirimler için hafif saydamlık

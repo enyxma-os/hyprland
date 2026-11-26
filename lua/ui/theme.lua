@@ -158,3 +158,23 @@ hl.config({
         background_color        = "0x0b0f14",
     },
 })
+
+-- Sekmeli pencere grubu çubuğu
+hl.config({
+    group = {
+        col = {
+            border_active   = active_a,
+            border_inactive = inactive_col,
+        },
+        groupbar = {
+            enabled       = true,
+            font_size     = 10,
+            gradients     = false,
+            render_titles = true,
+            col = {
+                active   = active_a,
+                inactive = inactive_col,
+            },
+        },
+    },
+})

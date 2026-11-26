@@ -164,9 +164,11 @@ end
 hl.bind(MOD .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(MOD .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
--- Özel çalışma alanı
+-- Özel çalışma alanı ve yüzer scratchpad uçbirimi
 hl.bind(MOD .. " + grave", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(MOD .. " + SHIFT + M", hl.dsp.window.move({ workspace = "special:magic" }))
+hl.bind(MOD .. " + ALT + Return", hl.dsp.exec_cmd("kitty --class enyxma-scratchpad -o remember_window_size=no"))
+hl.bind(MOD .. " + ALT + R", hl.dsp.window.resize({ x = 80, y = 0, relative = true }), { repeating = true })
 
 -- =====================================================
 -- FARE ILE PENCERE İŞLEMLERİ

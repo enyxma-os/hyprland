@@ -43,15 +43,19 @@ function GamingMode.toggle()
     GamingMode.active = not GamingMode.active
     if GamingMode.active then
         hl.config({
+            general = { allow_tearing = true },
+            misc = { vrr = 2 },
             animations = { enabled = false },
             decoration = {
                 blur = { enabled = false },
                 shadow = { enabled = false },
             },
         })
-        Utils.notify("✦ Enyxma Gaming", "Düşük Gecikme Modu Aktif (180Hz / Blur & Animasyon Kapalı)", 2500)
+        Utils.notify("✦ Enyxma Gaming 2.0", "Düşük Gecikme Modu Aktif — VRR, Tearing, Blur & Animasyon Kapalı", 2500)
     else
         hl.config({
+            general = { allow_tearing = false },
+            misc = { vrr = 0 },
             animations = { enabled = true },
             decoration = {
                 blur = { enabled = true },
