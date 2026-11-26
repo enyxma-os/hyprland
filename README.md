@@ -1,155 +1,153 @@
 # Enyxma Hyprland
 
-Hyprland 0.56 ve üzeri sürümler için saf Lua ile yazılmış bağımsız, modüler ve NixOS Flake uyumlu pencere yöneticisi ekosistemi.
+> **Language / Dil:** **English** | [Türkçe](./README.tr.md)
+
+A standalone, modular, and NixOS Flake-compatible window manager ecosystem written in pure Lua for Hyprland 0.56+.
 
 ---
 
-## Mimari Özellikler
+## Architectural Features
 
-- **Saf Lua Standardı:** Tüm yapılandırma Hyprland C++ Lua bağlayıcıları üzerinde çalışır. Harici eski yapılandırma dosyasına ihtiyaç duymaz.
-- **Enyxma Shell Canlı Entegrasyonu:**
-  - `~/.config/enyxma/settings.json` üzerinden varsayılan uçbirim ve dosya yöneticisini anlık okur.
-  - Oturum açılışında `~/.config/enyxma/hypridle.conf` dosyasını otomatik algılayarak Enyxma Ayarlar ile senkronize ekran kilidi ve DPMS yönetimi sağlar.
-  - `hyprctl eval` üzerinden Enyxma Ayarlar 2.0 değişikliklerini yeniden başlatma olmadan uygular.
-- **Nix Flake ve Modül Desteği:** Hem NixOS sistem modülü hem de Home Manager kullanıcı modülü sunar. Deklaratif kurulumu ve canlı geliştirme modunu destekler.
-- **İzole İsim Alanı:** `enyxma.desktop.hyprland` isim alanı kullanılarak diğer harici Flake modülleriyle olası çakışmalar kökten engellenmiştir.
-- **Otomatik Çakışma Denetimi:** Özel tarayıcı script ile kısayol tuş çakışmaları daha commit atılmadan yerel denetimle yakalanır.
-- **Donanım Bağımsız:** Sabit ekran kartı yolu veya sabit çıkış adı içermez. Sanal makinede yazılım imlecine, fiziksel donanımda ise yüksek yenileme hızına otomatik uyum sağlar.
-- **Akıllı Döşeme:** Dwindle split değeri ile pencerelerin üst üste binmesini önler, her yeni pencereyi sağa veya alta doğru akıllı spiral düzeninde açar.
-- **Evrensel Uygulama Zinciri:** Sistemde kurulu uçbirim, dosya yöneticisi ve menüyü otomatik tespit eder. Eksik uygulama durumunda oturum çökmez.
+- **Pure Lua Standard:** All configuration runs directly on Hyprland's C++ Lua bindings without legacy config files.
+- **Live Enyxma Shell Integration:**
+  - Dynamically reads default terminal, file manager, and `kbLayout` from `~/.config/enyxma/settings.json` with `ENYXMA_KB_LAYOUT` and `"us"` fallbacks.
+  - Automatically detects `~/.config/enyxma/hypridle.conf` at login for lock and DPMS management synchronized with Enyxma Settings.
+  - Applies Enyxma Settings 2.0 changes live via `hyprctl eval` without restarts.
+- **Nix Flake & `mkDefault` Modules:** Provides both NixOS (`nixosModules.default`) and Home Manager (`homeManagerModules.default`) modules with `mkDefault` options and live local `sourcePath` mode.
+- **Isolated Namespace:** Uses the `enyxma.desktop.hyprland` namespace to prevent collisions with external Flake modules.
+- **Automatic Conflict Checking:** A local keybind scanner catches duplicate bindings before commit.
+- **Hardware Agnostic:** No hardcoded GPU paths or monitor output names. Adapts to software cursors in VMs and high refresh rates on bare metal.
+- **Smart Tiling & Universal App Chain:** Dwindle layout with smart spiral splits and automatic fallback detection for terminals, file managers, and launchers.
 
 ---
 
-## Dizin Yapısı
+## Directory Structure
 
 ```text
 .
-├── default.nix            # Bağımsız Nix paket tanımı
-├── flake.nix              # Nix Flake giriş noktası ve modül çıktıları
-├── home-module.nix        # Home Manager kullanıcı seviyesi modülü
-├── Justfile               # Yönetim ve doğrulama komutları
-├── LICENSE                # GPL-3.0-or-later lisans metni
-├── nixos-module.nix       # NixOS sistem seviyesi masaüstü modülü
-├── README.md              # Belgelendirme
-├── hyprland.lua           # Ana giriş noktası ve güvenli modül yükleyici
+├── default.nix            # Standalone Nix package derivation
+├── flake.nix              # Nix Flake entry point and module outputs
+├── home-module.nix        # Home Manager user-level module
+├── Justfile               # Management and verification tasks
+├── LICENSE                # GPL-3.0-or-later license text
+├── nixos-module.nix       # NixOS system-level desktop module
+├── README.md              # Documentation (English)
+├── README.tr.md           # Documentation (Turkish)
+├── hyprland.lua           # Main entry point and safe module loader
 ├── lua
 │   ├── core
-│   │   ├── autostart.lua  # Arka plan servisleri, hypridle ve ortam değişkenleri
-│   │   └── hardware.lua   # Donanım, ekran, Türkçe klavye ve imleç
+│   │   ├── autostart.lua  # Background services, hypridle, and env vars
+│   │   └── hardware.lua   # Hardware, monitors, dynamic kb_layout, and cursor
 │   ├── ui
-│   │   └── theme.lua      # Renkler, yay eğrileri, animasyonlar ve dwindle
+│   │   └── theme.lua      # Colors, bezier curves, animations, and dwindle
 │   └── wm
-│       ├── binds.lua      # Kısayollar, dinamik settings.json okuyucu ve pano
-│       └── rules.lua      # Pencere kuralları ve katman ayarları
+│       ├── binds.lua      # Keybinds, dynamic settings.json reader, and clipboard
+│       └── rules.lua      # Window rules and layer rules
 └── scripts
-    └── check-binds.py     # Otomatik kısayol çakışma denetleyicisi
+    └── check-binds.py     # Automatic keybind conflict checker
 ```
 
 ---
 
-## Kısayol Referansı
+## Keybind Reference
 
-### Uygulamalar ve Sistem
+### Applications & System
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| SUPER + Return | Varsayılan uçbirimi çalıştır |
-| SUPER + Q | Aktif pencereyi kapat |
-| SUPER + SHIFT + Q | Pencereyi zorla sonlandır |
-| SUPER + E | Varsayılan dosya yöneticisini aç |
-| SUPER + Y | Yazi dosya yöneticisini uçbirimde aç |
-| SUPER + R | Uygulama başlatıcısını aç |
-| SUPER + W | Web tarayıcısını aç |
-| SUPER + L | Ekranı kilitle |
-| SUPER + I | Enyxma Ayarlar 2.0 penceresini aç veya kapat |
-| SUPER + T | Gotham ve Dinamik tema arasında geçiş yap |
-| SUPER + SHIFT + T | Duvar kağıdı galerisini aç |
-| SUPER + S | Yerel AI yan panelini aç veya kapat |
-| SUPER + SHIFT + V | Pano geçmişi menüsünü aç |
-| SUPER + SHIFT + R | Hyprland yapılandırmasını yeniden yükle |
-| SUPER + SHIFT + E | Oturumdan çıkış yap |
-| SUPER + N | Enyxma Bildirim Merkezini aç veya kapat |
-| SUPER + D | Enyxma Kontrol Merkezini aç veya kapat |
-| SUPER + B | Enyxma Üst Durum Çubuğunu aç veya kapat |
-| SUPER + Boşluk | Enyxma Omni Launcher arama menüsünü aç |
+| SUPER + Return | Launch default terminal |
+| SUPER + Q | Close active window |
+| SUPER + SHIFT + Q | Force-kill active window |
+| SUPER + E | Open default file manager |
+| SUPER + Y | Open Yazi file manager in terminal |
+| SUPER + R | Open application launcher |
+| SUPER + W | Open web browser |
+| SUPER + L | Lock screen |
+| SUPER + I | Toggle Enyxma Settings 2.0 |
+| SUPER + T | Cycle between Gotham and Dynamic themes |
+| SUPER + SHIFT + T | Open wallpaper gallery |
+| SUPER + S | Toggle local AI sidebar |
+| SUPER + SHIFT + V | Open clipboard history menu |
+| SUPER + SHIFT + R | Reload Hyprland configuration |
+| SUPER + SHIFT + E | Exit session |
+| SUPER + N | Toggle Enyxma Notification Center |
+| SUPER + D | Toggle Enyxma Control Center |
+| SUPER + B | Toggle Enyxma Top Bar |
+| SUPER + Space | Open Enyxma Omni Launcher |
 
-### Ekran Görüntüsü
+### Screenshots
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| Print | Tam ekran görüntüsü al ve panoya kopyala |
-| SHIFT + Print | Seçilen alan görüntüsü ve düzenleme moduna gir |
-| SUPER + SHIFT + S | Enyxma Shot ekran alma ve Mockup stüdyosuna gir |
-| SUPER + ALT + S | Tam ekran görüntüsünü doğrudan dosyaya kaydet |
-| SUPER + Print | Seçilen alan görüntüsü al ve panoya kopyala |
+| Print | Capture full screen to clipboard |
+| SHIFT + Print | Capture region and open Enyxma Shot editor |
+| SUPER + SHIFT + S | Open Enyxma Shot & Mockup studio |
+| SUPER + ALT + S | Save full-screen capture directly to file |
+| SUPER + Print | Capture region and open Enyxma Shot editor |
 
-### Pencere Yönetimi
+### Window Management
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| SUPER + F | Tam ekran durumunu değiştir |
-| SUPER + SHIFT + F | En büyük boyuta getir |
-| SUPER + V | Yüzen pencere durumunu değiştir |
-| SUPER + P | Sahte döşeme durumuna geç |
-| SUPER + J | Bölünme yönünü değiştir |
-| SUPER + G | Gaming Modu — Blur ve Animasyonları Anında Kapat |
-| SUPER + SHIFT + G | Sekme grubunu aç veya kapat |
-| SUPER + Tab | Sonraki pencereye odaklan |
-| SUPER + C | Pencereyi ekranda ortala |
+| SUPER + F | Toggle fullscreen |
+| SUPER + SHIFT + F | Maximize window |
+| SUPER + V | Toggle floating |
+| SUPER + P | Toggle pseudotiling |
+| SUPER + J | Toggle split direction |
+| SUPER + G | Gaming Mode — toggle blur and animations off |
+| SUPER + SHIFT + G | Toggle tab group |
+| SUPER + Tab | Focus next window |
+| SUPER + C | Center floating window |
 
-### Yön Tuşları ile Odak ve Boyut
+### Directional Focus & Sizing
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| SUPER + Yön Tuşları | Pencere odağını değiştir |
-| SUPER + SHIFT + Yön Tuşları | Pencereyi o yöne taşı |
-| SUPER + CTRL + Yön Tuşları | Pencerelerin yerini değiştir |
-| SUPER + SHIFT + CTRL + Yön Tuşları | Pencereyi o yönde boyutlandır |
+| SUPER + Arrow Keys | Move focus |
+| SUPER + SHIFT + Arrow Keys | Move window |
+| SUPER + CTRL + Arrow Keys | Swap windows |
+| SUPER + SHIFT + CTRL + Arrow Keys | Resize window |
 
-### Çoklu Ekran
+### Multi-Monitor
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| SUPER + virgül | Önceki monitöre odaklan |
-| SUPER + nokta | Sonraki monitöre odaklan |
-| SUPER + SHIFT + virgül | Pencereyi önceki monitöre taşı |
-| SUPER + SHIFT + nokta | Pencereyi sonraki monitöre taşı |
+| SUPER + Comma | Focus previous monitor |
+| SUPER + Period | Focus next monitor |
+| SUPER + SHIFT + Comma | Move window to previous monitor |
+| SUPER + SHIFT + Period | Move window to next monitor |
 
-### Çalışma Alanları
+### Workspaces
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| SUPER + 1..9, 0 | Belirtilen çalışma alanına geç |
-| SUPER + SHIFT + 1..9, 0 | Pencereyi çalışma alanına taşı |
-| SUPER + SHIFT + M | Pencereyi özel çalışma alanına gönder |
-| SUPER + Fare Tekerleği | Çalışma alanları arasında sırayla gez |
+| SUPER + 1..9, 0 | Switch to workspace |
+| SUPER + SHIFT + 1..9, 0 | Move window to workspace |
+| SUPER + SHIFT + M | Send window to special workspace |
+| SUPER + Mouse Wheel | Cycle workspaces |
 
-### Fare İşlemleri
+### Mouse Actions
 
-| Tuş | İşlev |
+| Key | Action |
 | :--- | :--- |
-| SUPER + Fare Sol | Pencereyi sürükle |
-| SUPER + Fare Sağ | Pencereyi boyutlandır |
+| SUPER + Left Click | Drag window |
+| SUPER + Right Click | Resize window |
 
 ---
 
-## Kurulum ve Entegrasyon
+## Installation & Integration
 
-### 1. Geleneksel Kurulum
+### 1. Traditional Installation
 
-Herhangi bir Linux dağıtımında doğrudan ev dizinine klonlamak için:
+Clone directly into your home configuration on any Linux distribution:
 
 ```bash
 git clone https://codeberg.org/enyxma/hyprland ~/.config/hypr
 ```
 
-Gerekli tüm modüller dinamik yollar üzerinden çözümlendiği için ek yol ayarı gerekmez.
+### 2. NixOS & Flake Integration
 
----
-
-### 2. NixOS ve Flake Entegrasyonu
-
-Ana sisteminizin `flake.nix` dosyasına girdi olarak ekleyin:
+Add as an input to your `flake.nix`:
 
 ```nix
 inputs = {
@@ -157,9 +155,7 @@ inputs = {
 };
 ```
 
-#### NixOS Sistem Modülü Olarak Kullanım
-
-Sistem seviyesinde Hyprland, UWSM ve temel masaüstü araçlarını etkinleştirmek için:
+#### As a NixOS System Module
 
 ```nix
 imports = [
@@ -169,9 +165,7 @@ imports = [
 enyxma.desktop.hyprland.enable = true;
 ```
 
-#### Home Manager Kullanıcı Modülü Olarak Kullanım
-
-Lua dosyalarını kullanıcı ev dizinine deklaratif olarak bağlamak için:
+#### As a Home Manager Module
 
 ```nix
 imports = [
@@ -180,25 +174,23 @@ imports = [
 
 enyxma.desktop.hyprland = {
   enable = true;
-  # Canlı geliştirme modu için yerel kaynak dizini:
-  # sourcePath = "/home/kullanici/Projects/enyxma/hyprland";
+  # Optional local path for live development:
+  # sourcePath = "/home/username/Projects/enyxma/hyprland";
 };
 ```
 
 ---
 
-## Yönetim Komutları
-
-Depo içinde `just` aracıyla şu görevler çalıştırılabilir:
+## Management Commands
 
 ```bash
-just check     # Lua, Nix ve kısayol çakışmalarını test eder
-just reload    # Yerel Hyprland oturumunu tazeler
-just sync      # Testleri çalıştırır ve depoya gönderir
+just check     # Test Lua syntax, Nix checks, and keybind conflicts
+just reload    # Reload local Hyprland session
+just sync      # Run checks and push
 ```
 
 ---
 
-## Lisans
+## License
 
-GPL-3.0-or-later — Ayrıntılar için [LICENSE](./LICENSE) dosyasına bakın. Telif Hakkı © 2026 Enyxma OS Contributors.
+GPL-3.0-or-later — See [LICENSE](./LICENSE) for details. Copyright © 2026 Enyxma OS Contributors.
