@@ -108,11 +108,26 @@ end
 -- GİRİŞ BIRIMI AYARLARI
 -- =====================================================
 
--- Türkçe klavye düzeni tanımlanır
--- Q düzeni için tr değeri kullanılır
+-- Enyxma Ayarlar dosyasindan veya ortam degiskeninden klavye duzeni okunur
+local function read_kb_layout()
+    local home = get_env("HOME")
+    if home then
+        local content = read_file(home .. "/.config/enyxma/settings.json")
+        local val = content:match('"kbLayout"%s*:%s*"([^"]*)"')
+        if val and val ~= "" then
+            local clean = val:gsub("[^%w_%-,]", "")
+            if clean ~= "" then
+                return clean
+            end
+        end
+    end
+    return get_env("ENYXMA_KB_LAYOUT") or "us"
+end
+
+-- Klavye ve giris birimi ayarlari
 hl.config({
     input = {
-        kb_layout = "tr",
+        kb_layout = read_kb_layout(),
         kb_variant = "",
         kb_model = "",
         kb_options = "",

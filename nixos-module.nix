@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf mkEnableOption;
+  inherit (lib) mkIf mkEnableOption mkDefault;
   cfg = config.enyxma.desktop.hyprland;
 in {
   options.enyxma.desktop.hyprland = {
@@ -17,26 +17,26 @@ in {
 
   config = mkIf (cfg.enable || config.enyxma.hyprland.enable) {
     programs.hyprland = {
-      enable = true;
-      withUWSM = true;
-      xwayland.enable = true;
+      enable = mkDefault true;
+      withUWSM = mkDefault true;
+      xwayland.enable = mkDefault true;
     };
 
     environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1";
-      MOZ_ENABLE_WAYLAND = "1";
-      XDG_CURRENT_DESKTOP = "Hyprland";
-      XDG_SESSION_TYPE = "wayland";
-      XDG_SESSION_DESKTOP = "Hyprland";
+      NIXOS_OZONE_WL = mkDefault "1";
+      MOZ_ENABLE_WAYLAND = mkDefault "1";
+      XDG_CURRENT_DESKTOP = mkDefault "Hyprland";
+      XDG_SESSION_TYPE = mkDefault "wayland";
+      XDG_SESSION_DESKTOP = mkDefault "Hyprland";
     };
 
     xdg.portal = {
-      enable = true;
+      enable = mkDefault true;
       extraPortals = [
         pkgs.xdg-desktop-portal-hyprland
         pkgs.xdg-desktop-portal-gtk
       ];
-      config.common.default = ["hyprland" "gtk"];
+      config.common.default = mkDefault ["hyprland" "gtk"];
     };
 
     environment.etc = {
