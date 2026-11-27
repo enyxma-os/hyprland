@@ -67,10 +67,10 @@ hl.window_rule({
 -- Resim içinde resim penceresi sağ alt köşede açılır ve sabitlenir
 hl.window_rule({
     name  = "picture-in-picture-floating",
-    match = { title = "^(Picture-in-Picture|Picture in picture)$" },
+    match = { title = "^(Picture-in-Picture|Picture in picture|Resim içinde resim|Pencere içinde pencere|Görüntü içinde görüntü)$" },
     float = true,
     pin   = true,
-    size  = { "monitor_w*0.24", "monitor_h*0.24" },
+    size  = { "monitor_w*0.25", "monitor_h*0.25" },
     move  = { "monitor_w-window_w-24", "monitor_h-window_h-24" },
 })
 
@@ -128,8 +128,7 @@ hl.config({
         "tile, class:^(steam)$, title:^(Steam)$",
 
         -- Resim İçinde Resim en-boy oranı koruması
-        "keepaspectratio, title:^(Picture-in-Picture)$",
-        "keepaspectratio, title:^(Picture in picture)$",
+        "keepaspectratio, title:^(Picture-in-Picture|Picture in picture|Resim içinde resim|Pencere içinde pencere|Görüntü içinde görüntü)$",
 
         -- Geliştirici Ortamı Opasitesi Glassmorphism Derinliği
         "opacity 0.95 0.90, class:^(code)$",
