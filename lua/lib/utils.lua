@@ -13,15 +13,26 @@ function Utils.async_cmd(cmd)
     end
 end
 
--- Native Hyprland bildirimi v0.56+ — fork yok, dahili C++ katmanı, anında gösterir
+-- Enyxma dil ayarını ~/.config/enyxma/settings.json dosyasından okur
+function Utils.is_en()
+    local home = os.getenv("HOME")
+    if not home or home == "" then return false end
+    local f = io.open(home .. "/.config/enyxma/settings.json", "r")
+    if not f then return false end
+    local content = f:read("*a")
+    f:close()
+    if not content then return false end
+    return content:match('"language"%s*:%s*"([^"]+)"') == "en"
+end
+
+function Utils.t(tr, en)
+    if Utils.is_en() then return en end
+    return tr
+end
+
+-- Enyxma Shell bildirim sistemine notify-send üzerinden bildirim gönderir
 function Utils.notify(title, message, timeout)
-    timeout = timeout or 2500
-    local text = title .. ": " .. (message or "")
-    if hl and hl.notification and hl.notification.create then
-        hl.notification.create({ text = text, timeout = timeout })
-    else
-        Utils.notify_send(title, message, timeout)
-    end
+    Utils.notify_send(title, message, timeout)
 end
 
 -- Zengin masaüstü bildirimi libnotify üzerinden
@@ -29,7 +40,7 @@ function Utils.notify_send(title, message, timeout)
     timeout = timeout or 2500
     local safe_title = tostring(title):gsub("'", "'\\''")
     local safe_msg = tostring(message or ""):gsub("'", "'\\''")
-    Utils.async_cmd(string.format("notify-send '%s' '%s' -t %d", safe_title, safe_msg, timeout))
+    Utils.async_cmd(string.format("notify-send -a 'Enyxma' '%s' '%s' -t %d", safe_title, safe_msg, timeout))
 end
 
 -- Enyxma Shell Quickshell IPC çağrısı Örn: Utils.qs_ipc"enyxma-bar", "hide"

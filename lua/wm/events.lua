@@ -51,7 +51,7 @@ function GamingMode.toggle()
                 shadow = { enabled = false },
             },
         })
-        Utils.notify("✦ Enyxma Gaming 2.0", "Düşük Gecikme Modu Aktif — VRR, Tearing, Blur & Animasyon Kapalı", 2500)
+        Utils.notify(Utils.t("Oyun Modu Aktif", "Gaming Mode Enabled"), Utils.t("Düşük gecikme — VRR, bulanıklık ve animasyonlar kapatıldı.", "Low latency — VRR, blur, shadows, and animations disabled."), 3000)
     else
         hl.config({
             general = { allow_tearing = false },
@@ -62,7 +62,7 @@ function GamingMode.toggle()
                 shadow = { enabled = true },
             },
         })
-        Utils.notify("✦ Enyxma Normal", "Glassmorphism & Animasyonlar Aktif", 2500)
+        Utils.notify(Utils.t("Normal Mod Aktif", "Normal Mode Restored"), Utils.t("Bulanıklık, gölgeler ve animasyonlar yeniden açıldı.", "Blur, shadows, and animations re-enabled."), 3000)
     end
 end
 
@@ -79,7 +79,7 @@ hl.on("window.open", function(w)
         local addr = w.address or ""
         if addr ~= "" then
             Utils.async_cmd("hyprctl dispatch movetoworkspacesilent 9,address:" .. addr)
-            Utils.notify("✦ Odak Korundu", (w.title or class) .. " sessizce Workspace 9'a taşındı.", 3000)
+            Utils.notify(Utils.t("Odak Korundu", "Focus Preserved"), (w.title or class) .. Utils.t(" sessizce Çalışma Alanı 9'a taşındı.", " moved silently to Workspace 9."), 3000)
         end
         return
     end
@@ -91,7 +91,7 @@ hl.on("window.open", function(w)
 
         if ws_window_counts[ws_id] >= 3 and not w.floating then
             hl.dispatch(hl.dsp.group.toggle())
-            Utils.notify("✦ Enyxma Auto-Tab", "Alan daraldığı için Geometrik Koruma (Sekme) aktif edildi.", 2500)
+            Utils.notify(Utils.t("Otomatik Sekme", "Auto-Tab Enabled"), Utils.t("Alan daraldığı için pencereler sekmeli gruba alındı.", "Windows grouped into tabs to preserve space."), 2500)
         end
     end
 end)

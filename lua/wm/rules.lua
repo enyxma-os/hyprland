@@ -74,15 +74,6 @@ hl.window_rule({
     move  = { "monitor_w-window_w-24", "monitor_h-window_h-24" },
 })
 
--- Yüzer scratchpad uçbirimi
-hl.window_rule({
-    name  = "enyxma-scratchpad-floating",
-    match = { class = "^enyxma-scratchpad$" },
-    float  = true,
-    center = true,
-    size   = { "monitor_w*0.65", "monitor_h*0.65" },
-})
-
 -- Uçbirimler için hafif saydamlık
 hl.window_rule({
     name  = "terminal-opacity",
