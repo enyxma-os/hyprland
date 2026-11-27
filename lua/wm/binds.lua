@@ -167,7 +167,8 @@ hl.bind(MOD .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 -- Özel çalışma alanı
 hl.bind(MOD .. " + grave", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(MOD .. " + SHIFT + M", hl.dsp.window.move({ workspace = "special:magic" }))
-hl.bind(MOD .. " + ALT + R", hl.dsp.exec_cmd("command -v enyxma-record >/dev/null 2>&1 && enyxma-record toggle || true"))
+hl.bind(MOD .. " + ALT + R", hl.dsp.exec_cmd("command -v enyxma-record >/dev/null 2>&1 && enyxma-record panel toggle || true"))
+hl.bind(MOD .. " + CTRL + R", hl.dsp.exec_cmd("command -v enyxma-record >/dev/null 2>&1 && enyxma-record toggle || true"))
 
 -- =====================================================
 -- FARE ILE PENCERE İŞLEMLERİ

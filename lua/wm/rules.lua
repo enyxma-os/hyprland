@@ -159,8 +159,9 @@ hl.config({
         "animation fade, enyxma-notify",
         "animation fade, enyxma-osd",
 
-        -- Enyxma Shot & Mockup Stüdyosu
+        -- Enyxma Shot & Enyxma Record Stüdyosu
         "animation fade, enyxma-shot",
+        "animation fade, enyxma-record",
 
         -- Enyxma Overview Mission Control pencere genel bakışı
         "animation fade, enyxma-overview",
