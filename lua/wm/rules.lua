@@ -162,6 +162,8 @@ hl.config({
         -- Enyxma Shot & Enyxma Record Stüdyosu
         "animation fade, enyxma-shot",
         "animation fade, enyxma-record",
+        "animation fade, enyxma-record-osd",
+        "noanim, enyxma-record-reticle",
 
         -- Enyxma Overview Mission Control pencere genel bakışı
         "animation fade, enyxma-overview",
